@@ -1,4 +1,4 @@
-import { StyleSheet, Text, SafeAreaView, View, Platform, StatusBar} from 'react-native'
+import { StyleSheet, Text, SafeAreaView, View, Platform, StatusBar } from 'react-native'
 import OctIcon from 'react-native-vector-icons/Octicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 
@@ -40,19 +40,19 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: colors.dark,
+    backgroundColor: colors.secondaryBackgorund,
     paddingHorizontal: 20
   },
   currentEvent: {
     flex: 10,
-    backgroundColor: colors.darker,
+    backgroundColor: colors.mainBackground,
   },
   nextEvent: {
     flex: 1,
-    backgroundColor: colors.dark,
+    backgroundColor: colors.secondaryBackgorund,
   },
   text: {
-    color: colors.light,
+    color: colors.foreground,
   },
   bigText: {
     fontSize: 28

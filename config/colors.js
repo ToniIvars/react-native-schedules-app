@@ -1,5 +1,5 @@
 export default {
-  dark: '#424242',
-  darker: '#2B2B2B',
-  light: '#F7F7FF'
+  mainBackground: '#424242',
+  secondaryBackgorund: '#2B2B2B',
+  foreground: '#F7F7FF'
 }
