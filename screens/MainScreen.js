@@ -16,11 +16,11 @@ export default function MainScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={[styles.basic, styles.configBar]}>
-        <OctIcon name='gear' size={24} style={[styles.text, {paddingTop: 2}]}
+        <OctIcon name='gear' size={24} style={[styles.text, {marginTop: 2, padding: 12}]}
           onPress={() => navigation.navigate('Configuration')}
         />
         <Text style={[styles.text, styles.scheduleTitle]}>Schedule title</Text>
-        <MaterialIcon name='timetable' size={28} style={[styles.text, {paddingTop: 6}]} />
+        <MaterialIcon name='timetable' size={28} style={[styles.text, {marginTop: 6, padding: 12}]} />
       </View>
 
       <View style={[styles.basic, styles.currentEvent]}>
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: colors.secondaryBackgorund,
-    paddingHorizontal: 20
+    paddingHorizontal: 8
   },
   scheduleTitle: {
     fontSize: 28

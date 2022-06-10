@@ -133,9 +133,11 @@ const styles = StyleSheet.create({
   },
   goBackIcon: {
     position: 'absolute',
-    top: (Platform.OS === 'android' ? StatusBar.currentHeight : 0) + 16,
-    left: 14,
-    color: 'white',
-    zIndex: 1
+    top: (Platform.OS === 'android' ? StatusBar.currentHeight : 0) + 6,
+    left: 4,
+    color: colors.foreground,
+    zIndex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 16
   }
 })
