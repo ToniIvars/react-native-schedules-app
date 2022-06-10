@@ -1,17 +1,25 @@
 import { StyleSheet, Text, SafeAreaView, View, Platform, StatusBar } from 'react-native'
+import { useFonts, OpenSans_400Regular } from '@expo-google-fonts/open-sans'
 import OctIcon from 'react-native-vector-icons/Octicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import AppLoading from 'expo-app-loading'
 
 import colors from '../config/colors'
 
 export default function MainScreen({ navigation }) {
+  let [fontsLoaded] = useFonts({OpenSans_400Regular})
+
+  if (!fontsLoaded) {
+    return <AppLoading />
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={[styles.basic, styles.configBar]}>
         <OctIcon name='gear' size={24} style={[styles.text, {paddingTop: 2}]}
           onPress={() => navigation.navigate('Configuration')}
         />
-        <Text style={[styles.text, styles.timetableTitle]}>Timetable title</Text>
+        <Text style={[styles.text, styles.scheduleTitle]}>Schedule title</Text>
         <MaterialIcon name='timetable' size={28} style={[styles.text, {paddingTop: 6}]} />
       </View>
 
@@ -42,19 +50,20 @@ const styles = StyleSheet.create({
   },
   text: {
     color: colors.foreground,
+    fontFamily: 'OpenSans_400Regular'
   },
   configBar: {
-    flex: 1,
+    height: 60,
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: colors.secondaryBackgorund,
     paddingHorizontal: 20
   },
-  timetableTitle: {
+  scheduleTitle: {
     fontSize: 28
   },
   currentEvent: {
-    flex: 10,
+    flex: 1,
     backgroundColor: colors.mainBackground,
     paddingBottom: 70
   },
@@ -67,7 +76,7 @@ const styles = StyleSheet.create({
     fontSize: 112
   },
   nextEvent: {
-    flex: 1,
+    height: 60,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     backgroundColor: colors.secondaryBackgorund,
