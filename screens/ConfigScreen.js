@@ -7,7 +7,7 @@ import ModalDropdown from 'react-native-modal-dropdown'
 
 import colors from '../config/colors'
 
-export default function ConfigScreen() {
+export default function ConfigScreen({ navigation }) {
   const [darkMode, setDarkMode] = useState(true)
   const [language, setLanguage] = useState('English')
 
@@ -22,38 +22,43 @@ export default function ConfigScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={[styles.basic, styles.titleBar]}>
-        <OctIcon name='gear' size={24} style={[styles.text, {paddingTop: 2, paddingRight: 12}]} />
-        <Text style={[styles.text, styles.screenTitle]}>Configuration</Text>
-      </View>
+        <OctIcon name='arrow-left' size={32}
+          style={styles.goBackIcon}
+          backgroundColor={colors.secondaryBackgorund} onPress={navigation.goBack}
+        />
 
-      <View style={[styles.basic, styles.configuration]}>
-        <View style={styles.configOptionContainer}>
-          <Text style={[styles.text, styles.configOptionText]}>Dark mode</Text>
-          <Switch
-            style={{ transform: [{ scaleX: 1.1 }, { scaleY: 1.1 }] }}
-            trackColor={{ false: '#767577', true: '#FBF989' }}
-            thumbColor={darkMode ? '#ECE809' : '#ADADAD'}
-            ios_backgroundColor='#3E3E3E'
-            onValueChange={toggleSwitch}
-            value={darkMode}
-          />
+        <View style={[styles.basic, styles.titleBar]}>
+          <OctIcon name='gear' size={24} style={[styles.text, {paddingTop: 2, paddingRight: 12}]} />
+          <Text style={[styles.text, styles.screenTitle]}>Configuration</Text>
         </View>
 
-        <View style={styles.configOptionContainer}>
-          <Text style={[styles.text, styles.configOptionText]}>Language</Text>
-          <ModalDropdown
-            options={['English', 'Español']}
-            defaultValue={language}
-            onSelect={selectLang}
-            style={styles.dropdownButton}
-            textStyle={[styles.text, styles.dropdownButtonText]}
-            dropdownStyle={styles.dropdown}
-            dropdownTextStyle={[styles.text, styles.dropdownText]}
-            dropdownTextHighlightStyle={[styles.text, {backgroundColor: colors.mainBackground}]}
-          />
+        <View style={[styles.basic, styles.configuration]}>
+          <View style={styles.configOptionContainer}>
+            <Text style={[styles.text, styles.configOptionText]}>Dark mode</Text>
+            <Switch
+              style={{ transform: [{ scaleX: 1.1 }, { scaleY: 1.1 }] }}
+              trackColor={{ false: '#767577', true: '#FBF989' }}
+              thumbColor={darkMode ? '#ECE809' : '#ADADAD'}
+              ios_backgroundColor='#3E3E3E'
+              onValueChange={toggleSwitch}
+              value={darkMode}
+            />
+          </View>
+
+          <View style={styles.configOptionContainer}>
+            <Text style={[styles.text, styles.configOptionText]}>Language</Text>
+            <ModalDropdown
+              options={['English', 'Español']}
+              defaultValue={language}
+              onSelect={selectLang}
+              style={styles.dropdownButton}
+              textStyle={[styles.text, styles.dropdownButtonText]}
+              dropdownStyle={styles.dropdown}
+              dropdownTextStyle={[styles.text, styles.dropdownText]}
+              dropdownTextHighlightStyle={[styles.text, {backgroundColor: colors.mainBackground}]}
+            />
+          </View>
         </View>
-      </View>
     </SafeAreaView>
   )
 }
@@ -118,5 +123,12 @@ const styles = StyleSheet.create({
   dropdownButtonText: {
     color: colors.secondaryForeground,
     fontSize: 14
+  },
+  goBackIcon: {
+    position: 'absolute',
+    top: (Platform.OS === 'android' ? StatusBar.currentHeight : 0) + 20,
+    left: 14,
+    color: 'white',
+    zIndex: 1
   }
 })
