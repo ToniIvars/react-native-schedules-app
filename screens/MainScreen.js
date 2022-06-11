@@ -20,7 +20,9 @@ export default function MainScreen({ navigation }) {
           onPress={() => navigation.navigate('Configuration')}
         />
         <Text style={[styles.text, styles.scheduleTitle]}>Schedule title</Text>
-        <MaterialIcon name='timetable' size={28} style={[styles.text, {marginTop: 6, padding: 12}]} />
+        <MaterialIcon name='timetable' size={28} style={[styles.text, {marginTop: 6, padding: 12}]}
+          onPress={() => navigation.navigate('Schedules')}
+        />
       </View>
 
       <View style={[styles.basic, styles.currentEvent]}>
