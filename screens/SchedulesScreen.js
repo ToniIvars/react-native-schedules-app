@@ -56,13 +56,13 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   text: {
-    color: colors.foreground,
+    color: colors.mainForeground,
     fontFamily: 'OpenSans_400Regular'
   },
   titleBar: {
     height: 60,
     flexDirection: 'row',
-    backgroundColor: colors.secondaryBackgorund,
+    backgroundColor: colors.secondaryBackground,
   },
   screenTitle: {
     fontSize: 28
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: (Platform.OS === 'android' ? StatusBar.currentHeight : 0) + 6,
     left: 4,
-    color: colors.foreground,
+    color: colors.mainForeground,
     zIndex: 1,
     paddingVertical: 10,
     paddingHorizontal: 16
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     fontSize: 24
   },
   schedule: {
-    backgroundColor: colors.secondaryBackgorund,
+    backgroundColor: colors.secondaryBackground,
     width: Dimensions.get('window').width - 40,
     borderRadius: 5,
     marginVertical: 10,

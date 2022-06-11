@@ -83,13 +83,13 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   text: {
-    color: colors.foreground,
+    color: colors.mainForeground,
     fontFamily: 'OpenSans_400Regular'
   },
   titleBar: {
     height: 60,
     flexDirection: 'row',
-    backgroundColor: colors.secondaryBackgorund,
+    backgroundColor: colors.secondaryBackground,
   },
   screenTitle: {
     fontSize: 28
@@ -112,13 +112,13 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     width: '45%',
-    backgroundColor: colors.secondaryBackgorund,
-    borderColor: colors.foreground,
+    backgroundColor: colors.secondaryBackground,
+    borderColor: colors.mainForeground,
     borderRadius: 5,
     paddingTop: 4
   },
   dropdownText: {
-    backgroundColor: colors.secondaryBackgorund,
+    backgroundColor: colors.secondaryBackground,
     fontSize: 14
   },
   dropdownButton: {
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: (Platform.OS === 'android' ? StatusBar.currentHeight : 0) + 6,
     left: 4,
-    color: colors.foreground,
+    color: colors.mainForeground,
     zIndex: 1,
     paddingVertical: 10,
     paddingHorizontal: 16

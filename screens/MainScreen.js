@@ -51,14 +51,14 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   text: {
-    color: colors.foreground,
+    color: colors.mainForeground,
     fontFamily: 'OpenSans_400Regular'
   },
   configBar: {
     height: 60,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: colors.secondaryBackgorund,
+    backgroundColor: colors.secondaryBackground,
     paddingHorizontal: 8
   },
   scheduleTitle: {
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     height: 60,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    backgroundColor: colors.secondaryBackgorund,
+    backgroundColor: colors.secondaryBackground,
     paddingHorizontal: 16
   },
 })
