@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, Platform, StatusBar, Switch } from 'react-native'
 import { useFonts, OpenSans_400Regular } from '@expo-google-fonts/open-sans'
 import OctIcon from 'react-native-vector-icons/Octicons'
@@ -6,13 +6,17 @@ import IonIcon from 'react-native-vector-icons/Ionicons'
 import AppLoading from 'expo-app-loading'
 import ModalDropdown from 'react-native-modal-dropdown'
 
-import colors from '../config/colors'
+import { ThemeContext } from '../App'
+import colorPalette from '../config/colors'
 
 export default function ConfigScreen({ navigation }) {
-  const [darkMode, setDarkMode] = useState(true)
+  const { darkTheme, setDarkTheme } = useContext(ThemeContext)
+
+  const [styles, colors] = createStyles(darkTheme)
+
   const [language, setLanguage] = useState('English')
 
-  const toggleSwitch = () => setDarkMode(previousState => !previousState)
+  const toggleSwitch = () => setDarkTheme(previousState => !previousState)
   const selectLang = (index, value) => setLanguage(value)
 
   let [fontsLoaded] = useFonts({OpenSans_400Regular})
@@ -42,10 +46,10 @@ export default function ConfigScreen({ navigation }) {
             <Switch
               style={{ transform: [{ scaleX: 1.1 }, { scaleY: 1.1 }] }}
               trackColor={{ false: '#767577', true: '#FBF989' }}
-              thumbColor={darkMode ? '#ECE809' : '#ADADAD'}
+              thumbColor={darkTheme ? '#ECE809' : '#ADADAD'}
               ios_backgroundColor='#3E3E3E'
               onValueChange={toggleSwitch}
-              value={darkMode}
+              value={darkTheme}
             />
           </View>
 
@@ -69,75 +73,80 @@ export default function ConfigScreen({ navigation }) {
     </SafeAreaView>
   )
 }
-  
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0
-  },
-  basic: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  text: {
-    color: colors.mainForeground,
-    fontFamily: 'OpenSans_400Regular'
-  },
-  titleBar: {
-    height: 60,
-    flexDirection: 'row',
-    backgroundColor: colors.secondaryBackground,
-  },
-  screenTitle: {
-    fontSize: 28
-  },
-  configuration: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    backgroundColor: colors.mainBackground,
-  },
-  configOptionContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    paddingHorizontal: 24,
-    paddingTop: 8
-  },
-  configOptionText: {
-    fontSize: 20,
-  },
-  dropdown: {
-    width: '45%',
-    backgroundColor: colors.secondaryBackground,
-    borderColor: colors.mainForeground,
-    borderRadius: 5,
-    paddingTop: 4
-  },
-  dropdownText: {
-    backgroundColor: colors.secondaryBackground,
-    fontSize: 14
-  },
-  dropdownButton: {
-    backgroundColor: '#ADADAD',
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    borderRadius: 5
-  },
-  dropdownButtonText: {
-    color: colors.secondaryForeground,
-    fontSize: 14
-  },
-  goBackIcon: {
-    position: 'absolute',
-    top: (Platform.OS === 'android' ? StatusBar.currentHeight : 0) + 6,
-    left: 4,
-    color: colors.mainForeground,
-    zIndex: 1,
-    paddingVertical: 10,
-    paddingHorizontal: 16
-  }
-})
+
+const createStyles = darkTheme => {
+  const colors = darkTheme ? colorPalette.darkTheme : colorPalette.lightTheme
+
+  return [StyleSheet.create({
+    container: {
+      backgroundColor: colors.secondaryBackground,
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0
+    },
+    basic: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '100%',
+    },
+    text: {
+      color: colors.mainForeground,
+      fontFamily: 'OpenSans_400Regular'
+    },
+    titleBar: {
+      height: 60,
+      flexDirection: 'row',
+      backgroundColor: colors.secondaryBackground,
+    },
+    screenTitle: {
+      fontSize: 28
+    },
+    configuration: {
+      flex: 1,
+      justifyContent: 'flex-start',
+      backgroundColor: colors.mainBackground,
+    },
+    configOptionContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      width: '100%',
+      paddingHorizontal: 24,
+      paddingTop: 8
+    },
+    configOptionText: {
+      fontSize: 20,
+    },
+    dropdown: {
+      width: '45%',
+      backgroundColor: colors.secondaryBackground,
+      borderColor: colors.mainForeground,
+      borderRadius: 5,
+      paddingTop: 4
+    },
+    dropdownText: {
+      backgroundColor: colors.secondaryBackground,
+      fontSize: 14
+    },
+    dropdownButton: {
+      backgroundColor: '#ADADAD',
+      paddingHorizontal: 14,
+      paddingVertical: 6,
+      borderRadius: 5
+    },
+    dropdownButtonText: {
+      color: colors.secondaryForeground,
+      fontSize: 14
+    },
+    goBackIcon: {
+      position: 'absolute',
+      top: (Platform.OS === 'android' ? StatusBar.currentHeight : 0) + 6,
+      left: 4,
+      color: colors.mainForeground,
+      zIndex: 1,
+      paddingVertical: 10,
+      paddingHorizontal: 16
+    }
+  }), colors]
+}

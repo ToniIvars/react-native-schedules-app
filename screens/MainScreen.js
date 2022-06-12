@@ -1,12 +1,18 @@
+import { useContext } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, Platform, StatusBar } from 'react-native'
 import { useFonts, OpenSans_400Regular } from '@expo-google-fonts/open-sans'
 import OctIcon from 'react-native-vector-icons/Octicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import AppLoading from 'expo-app-loading'
 
-import colors from '../config/colors'
+import { ThemeContext } from '../App'
+import colorPalette from '../config/colors'
 
 export default function MainScreen({ navigation }) {
+  const { darkTheme } = useContext(ThemeContext)
+
+  const styles = createStyles(darkTheme)
+
   let [fontsLoaded] = useFonts({OpenSans_400Regular})
 
   if (!fontsLoaded) {
@@ -37,51 +43,56 @@ export default function MainScreen({ navigation }) {
     </SafeAreaView>
   )
 }
-  
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0
-  },
-  basic: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  text: {
-    color: colors.mainForeground,
-    fontFamily: 'OpenSans_400Regular'
-  },
-  configBar: {
-    height: 60,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: colors.secondaryBackground,
-    paddingHorizontal: 8
-  },
-  scheduleTitle: {
-    fontSize: 28
-  },
-  currentEvent: {
-    flex: 1,
-    backgroundColor: colors.mainBackground,
-    paddingBottom: 70
-  },
-  currentEventName: {
-    fontSize: 20,
-    textAlign: 'center',
-    paddingHorizontal: 24
-  },
-  clock: {
-    fontSize: 112
-  },
-  nextEvent: {
-    height: 60,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    backgroundColor: colors.secondaryBackground,
-    paddingHorizontal: 16
-  },
-})
+
+const createStyles = darkTheme => {
+  const colors = darkTheme ? colorPalette.darkTheme : colorPalette.lightTheme
+
+  return StyleSheet.create({
+    container: {
+      backgroundColor: colors.secondaryBackground,
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0
+    },
+    basic: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '100%',
+    },
+    text: {
+      color: colors.mainForeground,
+      fontFamily: 'OpenSans_400Regular'
+    },
+    configBar: {
+      height: 60,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      backgroundColor: colors.secondaryBackground,
+      paddingHorizontal: 8
+    },
+    scheduleTitle: {
+      fontSize: 28
+    },
+    currentEvent: {
+      flex: 1,
+      backgroundColor: colors.mainBackground,
+      paddingBottom: 70
+    },
+    currentEventName: {
+      fontSize: 20,
+      textAlign: 'center',
+      paddingHorizontal: 24
+    },
+    clock: {
+      fontSize: 112
+    },
+    nextEvent: {
+      height: 60,
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      backgroundColor: colors.secondaryBackground,
+      paddingHorizontal: 16
+    }
+  })
+}
