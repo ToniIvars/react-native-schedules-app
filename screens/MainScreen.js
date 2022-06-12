@@ -5,11 +5,11 @@ import OctIcon from 'react-native-vector-icons/Octicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import AppLoading from 'expo-app-loading'
 
-import { ThemeContext } from '../App'
+import { GlobalContext } from '../App'
 import colorPalette from '../config/colors'
 
 export default function MainScreen({ navigation }) {
-  const { darkTheme } = useContext(ThemeContext)
+  const { darkTheme } = useContext(GlobalContext)
 
   const styles = createStyles(darkTheme)
 

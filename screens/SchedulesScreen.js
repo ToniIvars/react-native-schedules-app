@@ -5,11 +5,11 @@ import OctIcon from 'react-native-vector-icons/Octicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import AppLoading from 'expo-app-loading'
 
-import { ThemeContext } from '../App'
+import { GlobalContext } from '../App'
 import colorPalette from '../config/colors'
 
 export default function SchedulesScreen({ navigation }) {
-  const { darkTheme } = useContext(ThemeContext)
+  const { darkTheme, i18n } = useContext(GlobalContext)
   
   const [styles, colors] = createStyles(darkTheme)
 
@@ -28,7 +28,7 @@ export default function SchedulesScreen({ navigation }) {
 
       <View style={[styles.basic, styles.titleBar]}>
         <MaterialIcon name='timetable' size={28} style={[styles.text, {marginTop: 6, paddingRight: 10}]} />
-        <Text style={[styles.text, styles.screenTitle]}>Schedules</Text>
+        <Text style={[styles.text, styles.screenTitle]}>{i18n.t('schedules.title')}</Text>
       </View>
 
       <ScrollView style={styles.scheduleSection} contentContainerStyle={[styles.basic, {justifyContent: 'flex-start'}]}>
@@ -43,7 +43,7 @@ export default function SchedulesScreen({ navigation }) {
         <OctIcon.Button style={styles.newSchedule} backgroundColor={colors.mainBackground} underlayColor={colors.mainBackground}
           name='plus' size={30} onPress={() => console.log('Button pressed')}
         >
-          <Text style={styles.newScheduleText}>New schedule</Text>
+          <Text style={styles.newScheduleText}>{i18n.t('schedules.button')}</Text>
         </OctIcon.Button>
       </View>
     </SafeAreaView>
@@ -81,7 +81,7 @@ const createStyles = darkTheme => {
     scheduleSection: {
       flex: 1,
       backgroundColor: colors.mainBackground,
-      marginTop: 10,
+      paddingTop: 10,
     },
     goBackIcon: {
       position: 'absolute',

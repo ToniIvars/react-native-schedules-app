@@ -6,18 +6,16 @@ import IonIcon from 'react-native-vector-icons/Ionicons'
 import AppLoading from 'expo-app-loading'
 import ModalDropdown from 'react-native-modal-dropdown'
 
-import { ThemeContext } from '../App'
+import { GlobalContext, languages } from '../App'
 import colorPalette from '../config/colors'
 
 export default function ConfigScreen({ navigation }) {
-  const { darkTheme, setDarkTheme } = useContext(ThemeContext)
+  const { darkTheme, setDarkTheme, changeLanguage, i18n, language } = useContext(GlobalContext)
 
   const [styles, colors] = createStyles(darkTheme)
 
-  const [language, setLanguage] = useState('English')
-
   const toggleSwitch = () => setDarkTheme(previousState => !previousState)
-  const selectLang = (index, value) => setLanguage(value)
+  const selectLang = (index, value) => changeLanguage(value)
 
   let [fontsLoaded] = useFonts({OpenSans_400Regular})
 
@@ -34,14 +32,14 @@ export default function ConfigScreen({ navigation }) {
 
         <View style={[styles.basic, styles.titleBar]}>
           <OctIcon name='gear' size={24} style={[styles.text, {paddingTop: 2, paddingRight: 12}]} />
-          <Text style={[styles.text, styles.screenTitle]}>Configuration</Text>
+          <Text style={[styles.text, styles.screenTitle]}>{i18n.t('config.title')}</Text>
         </View>
 
         <View style={[styles.basic, styles.configuration]}>
           <View style={styles.configOptionContainer}>
             <View style={{ flexDirection: 'row' }}>
               <OctIcon name='moon' size={22} style={[styles.text, {marginRight: 10, paddingTop: 2, transform: [{rotate: '100deg'}]}]} />
-              <Text style={[styles.text, styles.configOptionText]}>Dark mode</Text>
+              <Text style={[styles.text, styles.configOptionText]}>{i18n.t('config.darkTheme')}</Text>
             </View>
             <Switch
               style={{ transform: [{ scaleX: 1.1 }, { scaleY: 1.1 }] }}
@@ -56,11 +54,11 @@ export default function ConfigScreen({ navigation }) {
           <View style={styles.configOptionContainer}>
             <View style={{ flexDirection: 'row' }}>
               <IonIcon name='language' size={22} style={[styles.text, {marginRight: 10, paddingTop: 2}]} />
-              <Text style={[styles.text, styles.configOptionText]}>Language</Text>
+              <Text style={[styles.text, styles.configOptionText]}>{i18n.t('config.language')}</Text>
             </View>
             <ModalDropdown
               options={['English', 'Español']}
-              defaultValue={language}
+              defaultValue={languages[language]}
               onSelect={selectLang}
               style={styles.dropdownButton}
               textStyle={[styles.text, styles.dropdownButtonText]}
