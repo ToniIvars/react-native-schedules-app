@@ -3,7 +3,6 @@ import { StyleSheet, Text, SafeAreaView, View, ScrollView, Platform, StatusBar, 
 import { useFonts, OpenSans_400Regular } from '@expo-google-fonts/open-sans'
 import OctIcon from 'react-native-vector-icons/Octicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import AppLoading from 'expo-app-loading'
 
 import { GlobalContext } from '../App'
 import colorPalette from '../config/colors'
@@ -13,10 +12,10 @@ export default function SchedulesScreen({ navigation }) {
   
   const [styles, colors] = createStyles(darkTheme)
 
-  let [fontsLoaded] = useFonts({OpenSans_400Regular})
+  const [fontsLoaded] = useFonts({OpenSans_400Regular})
 
   if (!fontsLoaded) {
-    return <AppLoading />
+    return null
   }
 
   return (

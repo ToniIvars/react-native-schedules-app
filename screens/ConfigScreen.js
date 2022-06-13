@@ -1,9 +1,8 @@
-import { useState, useContext } from 'react'
+import { useContext } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, Platform, StatusBar, Switch } from 'react-native'
 import { useFonts, OpenSans_400Regular } from '@expo-google-fonts/open-sans'
 import OctIcon from 'react-native-vector-icons/Octicons'
 import IonIcon from 'react-native-vector-icons/Ionicons'
-import AppLoading from 'expo-app-loading'
 import ModalDropdown from 'react-native-modal-dropdown'
 
 import { GlobalContext, languages } from '../App'
@@ -34,10 +33,10 @@ export default function ConfigScreen({ navigation }) {
     changeLanguage(language)
   }
 
-  let [fontsLoaded] = useFonts({OpenSans_400Regular})
+  const [fontsLoaded] = useFonts({OpenSans_400Regular})
 
   if (!fontsLoaded) {
-    return <AppLoading />
+    return null
   }
 
   return (
