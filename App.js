@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import * as Localization from 'expo-localization'
 import i18n from 'i18n-js'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import MainScreen from './screens/MainScreen'
 import ConfigScreen from './screens/ConfigScreen'
@@ -23,11 +24,44 @@ export const languages = {
   'es': 'Español'
 }
 
+const readData = async (key) => {
+  try {
+    const item = await AsyncStorage.getItem(key)
+    return item !== null ? JSON.parse(item) : {}
+
+  } catch(e) {
+    console.error(e)
+  }
+}
+
+const saveData = async (key, value) => {
+  try {
+    const jsonValue = JSON.stringify(value)
+    await AsyncStorage.setItem(key, jsonValue)
+
+  } catch (e) {
+    console.error(e)
+  }
+}
+
 export default function App() {
   const [darkTheme, setDarkTheme] = useState(true)
   const [language, setLanguage] = useState(Localization.locale.substring(0, 2))
 
   const changeLanguage = lang => setLanguage(languages[lang])
+
+  useEffect(() => {
+    readData('@config')
+      .then(config => {
+        if (config.darkTheme !== undefined) {
+          setDarkTheme(config.darkTheme)
+        }
+
+        if (config.language !== undefined) {
+          changeLanguage(config.language)
+        }
+      })
+  }, [])
 
   i18n.locale = language
 
@@ -36,7 +70,9 @@ export default function App() {
     setDarkTheme: setDarkTheme,
     language: language,
     changeLanguage: changeLanguage,
-    i18n: i18n
+    i18n: i18n,
+    readData: readData,
+    saveData: saveData
   }
 
   return (

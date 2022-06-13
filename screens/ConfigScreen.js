@@ -10,12 +10,29 @@ import { GlobalContext, languages } from '../App'
 import colorPalette from '../config/colors'
 
 export default function ConfigScreen({ navigation }) {
-  const { darkTheme, setDarkTheme, changeLanguage, i18n, language } = useContext(GlobalContext)
+  const { darkTheme, setDarkTheme, changeLanguage, i18n, language, saveData, readData } = useContext(GlobalContext)
 
   const [styles, colors] = createStyles(darkTheme)
 
-  const toggleSwitch = () => setDarkTheme(previousState => !previousState)
-  const selectLang = (index, value) => changeLanguage(value)
+  const toggleSwitch = () => {
+    readData('@config')
+      .then(previousConfig => {
+        previousConfig.darkTheme = !previousConfig.darkTheme
+        saveData('@config', previousConfig)
+      })
+
+    setDarkTheme(previousState => !previousState)
+  }
+
+  const selectLang = (index, language) => {
+    readData('@config')
+      .then(previousConfig => {
+        previousConfig.language = language
+        saveData('@config', previousConfig)
+      })
+
+    changeLanguage(language)
+  }
 
   let [fontsLoaded] = useFonts({OpenSans_400Regular})
 
