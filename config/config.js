@@ -1,4 +1,4 @@
-import React from 'react'
+import { createContext } from 'react'
 
 const colorPalette = {
   lightTheme: {
@@ -19,7 +19,7 @@ const colorPalette = {
   }
 }
 
-const GlobalContext = React.createContext()
+const GlobalContext = createContext()
 
 const languages = {
   'English': 'en',
