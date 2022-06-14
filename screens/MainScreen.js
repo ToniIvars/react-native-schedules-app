@@ -4,8 +4,7 @@ import { useFonts, OpenSans_400Regular } from '@expo-google-fonts/open-sans'
 import OctIcon from 'react-native-vector-icons/Octicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 
-import { GlobalContext } from '../App'
-import colorPalette from '../config/colors'
+import { colorPalette, GlobalContext } from '../config/config'
 
 export default function MainScreen({ navigation }) {
   const { darkTheme } = useContext(GlobalContext)

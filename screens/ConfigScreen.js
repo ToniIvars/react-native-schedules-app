@@ -5,8 +5,7 @@ import OctIcon from 'react-native-vector-icons/Octicons'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import ModalDropdown from 'react-native-modal-dropdown'
 
-import { GlobalContext, languages } from '../App'
-import colorPalette from '../config/colors'
+import { colorPalette, GlobalContext, languages } from '../config/config'
 
 export default function ConfigScreen({ navigation }) {
   const { darkTheme, setDarkTheme, changeLanguage, i18n, language, saveData, readData } = useContext(GlobalContext)

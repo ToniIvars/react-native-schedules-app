@@ -10,20 +10,12 @@ import ConfigScreen from './screens/ConfigScreen'
 import SchedulesScreen from './screens/SchedulesScreen'
 import NewScheduleScreen from './screens/NewScheduleScreen'
 import { en, es } from './i18n/translations'
+import { GlobalContext, languages } from './config/config'
 
 const Stack = createNativeStackNavigator()
 
-export const GlobalContext = React.createContext()
-
 i18n.translations = { en, es }
 i18n.fallbacks = true
-
-export const languages = {
-  'English': 'en',
-  'Español': 'es',
-  'en': 'English',
-  'es': 'Español'
-}
 
 const readData = async (key) => {
   try {

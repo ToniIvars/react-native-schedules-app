@@ -1,4 +1,6 @@
-export default {
+import React from 'react'
+
+const colorPalette = {
   lightTheme: {
     mainBackground: '#E8E8E8',
     secondaryBackground: '#CDCDCD',
@@ -16,3 +18,14 @@ export default {
     grey: '#AFAFAF'
   }
 }
+
+const GlobalContext = React.createContext()
+
+const languages = {
+  'English': 'en',
+  'Español': 'es',
+  'en': 'English',
+  'es': 'Español'
+}
+
+export { colorPalette, GlobalContext, languages }
