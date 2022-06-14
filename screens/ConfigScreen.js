@@ -59,8 +59,8 @@ export default function ConfigScreen({ navigation }) {
             </View>
             <Switch
               style={{ transform: [{ scaleX: 1.1 }, { scaleY: 1.1 }] }}
-              trackColor={{ false: '#767577', true: '#FBF989' }}
-              thumbColor={darkTheme ? '#ECE809' : '#ADADAD'}
+              trackColor={{ false: '#767577', true: '#9CD2F1' }}
+              thumbColor={darkTheme ? '#2DA4E8' : '#ADADAD'}
               ios_backgroundColor='#3E3E3E'
               onValueChange={toggleSwitch}
               value={darkTheme}
