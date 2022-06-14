@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import MainScreen from './screens/MainScreen'
 import ConfigScreen from './screens/ConfigScreen'
 import SchedulesScreen from './screens/SchedulesScreen'
+import NewScheduleScreen from './screens/NewScheduleScreen'
 import { en, es } from './i18n/translations'
 
 const Stack = createNativeStackNavigator()
@@ -82,6 +83,7 @@ export default function App() {
           <Stack.Screen name='Main' component={MainScreen} />
           <Stack.Screen name='Configuration' component={ConfigScreen} />
           <Stack.Screen name='Schedules' component={SchedulesScreen} />
+          <Stack.Screen name='New Schedule' component={NewScheduleScreen} />
         </Stack.Navigator>
       </GlobalContext.Provider>
     </NavigationContainer>

@@ -1,5 +1,5 @@
-import { useContext } from 'react'
-import { StyleSheet, Text, SafeAreaView, View, ScrollView, Platform, StatusBar, Dimensions, TouchableHighlight } from 'react-native'
+import { useState, useContext } from 'react'
+import { StyleSheet, Text, SafeAreaView, View, Platform, StatusBar, Dimensions, TextInput } from 'react-native'
 import { useFonts, OpenSans_400Regular } from '@expo-google-fonts/open-sans'
 import OctIcon from 'react-native-vector-icons/Octicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -9,6 +9,7 @@ import colorPalette from '../config/colors'
 
 export default function SchedulesScreen({ navigation }) {
   const { darkTheme, i18n } = useContext(GlobalContext)
+  const [scheduleTitle, setScheduleTitle] = useState('')
   
   const [styles, colors] = createStyles(darkTheme)
 
@@ -27,22 +28,32 @@ export default function SchedulesScreen({ navigation }) {
 
       <View style={[styles.basic, styles.titleBar]}>
         <MaterialIcon name='timetable' size={28} style={[styles.text, {marginTop: 6, paddingRight: 10}]} />
-        <Text style={[styles.text, styles.screenTitle]}>{i18n.t('schedules.title')}</Text>
+        <Text style={[styles.text, styles.screenTitle]}>{i18n.t('newSchedule.title')}</Text>
       </View>
 
-      <ScrollView style={styles.scheduleSection} contentContainerStyle={[styles.basic, {justifyContent: 'flex-start'}]}>
-        <TouchableHighlight onPress={() => console.log('Yes')} underlayColor={colors.mainBackground} style={styles.basic}>
-          <View style={[styles.basic, styles.schedule]}>
-            <Text style={[styles.text, styles.scheduleTitle]}>Schedule title</Text>
-          </View>
-        </TouchableHighlight>
-      </ScrollView>
+      <View style={[styles.basic, styles.scheduleSection]}>
+        <TextInput
+          style={[styles.input, styles.scheduleTitleInput]}
+          onChangeText={setScheduleTitle}
+          value={scheduleTitle}
+          maxLength={50}
+          placeholder={i18n.t('newSchedule.titlePlaceholder')}
+          placeholderTextColor={colors.grey}
+        />
+
+        <View style={[styles.basic, styles.eventsSectionTitle]}>
+          <Text style={[styles.text, {fontSize: 20}]}>{i18n.t('newSchedule.eventTitle')}</Text>
+          <MaterialIcon name='alarm-plus' size={24} style={[styles.text, styles.materialIcon]}
+          onPress={() => console.log('Add event')}
+        />
+        </View>
+      </View>
 
       <View style={[styles.basic, {backgroundColor: colors.mainBackground, paddingTop: 10}]}>
-        <OctIcon.Button style={styles.newSchedule} backgroundColor={colors.mainBackground} underlayColor={colors.mainBackground}
-          name='plus' size={30} onPress={() => navigation.navigate('New Schedule')}
+        <OctIcon.Button style={styles.addSchedule} backgroundColor={colors.mainBackground} underlayColor={colors.mainBackground}
+          name='plus' size={30} onPress={() => console.log('Button pressed')}
         >
-          <Text style={styles.newScheduleText}>{i18n.t('schedules.button')}</Text>
+          <Text style={styles.addScheduleText}>{i18n.t('newSchedule.button')}</Text>
         </OctIcon.Button>
       </View>
     </SafeAreaView>
@@ -81,6 +92,7 @@ const createStyles = darkTheme => {
       flex: 1,
       backgroundColor: colors.mainBackground,
       paddingTop: 10,
+      justifyContent: 'flex-start'
     },
     goBackIcon: {
       position: 'absolute',
@@ -91,27 +103,40 @@ const createStyles = darkTheme => {
       paddingVertical: 10,
       paddingHorizontal: 16
     },
-    newSchedule: {
+    addSchedule: {
       width: Dimensions.get('window').width - 40,
       backgroundColor: colors.green,
       height: 60,
       justifyContent: 'center',
       marginBottom: 16
     },
-    newScheduleText: {
+    addScheduleText: {
       color: '#F7F7FF',
       fontSize: 24
     },
-    schedule: {
+    input: {
       backgroundColor: colors.secondaryBackground,
+      color: colors.mainForeground,
       width: Dimensions.get('window').width - 40,
       borderRadius: 5,
+      marginHorizontal: 20,
       marginVertical: 10,
-      paddingVertical: 12,
-      marginHorizontal: 20
+      paddingHorizontal: 12,
+      paddingVertical: 8,
     },
-    scheduleTitle: {
-      fontSize: 16
+    scheduleTitleInput: {
+      fontSize: 20
+    },
+    eventsSectionTitle: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: Dimensions.get('window').width - 40,
+      borderBottomColor: colors.mainForeground,
+      borderBottomWidth: 1
+    },
+    materialIcon: {
+      marginTop: 2,
+      padding: 12
     }
   }), colors]
 }
