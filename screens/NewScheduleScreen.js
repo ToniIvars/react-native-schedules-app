@@ -1,14 +1,72 @@
 import { useState, useContext } from 'react'
-import { StyleSheet, Text, SafeAreaView, View, Platform, StatusBar, Dimensions, TextInput } from 'react-native'
+import { StyleSheet, Text, SafeAreaView, View, Platform, StatusBar, Dimensions, TextInput, ScrollView, TouchableHighlight } from 'react-native'
 import { useFonts, OpenSans_400Regular } from '@expo-google-fonts/open-sans'
 import OctIcon from 'react-native-vector-icons/Octicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { ColorPicker } from 'react-native-btr'
 
 import { colorPalette, GlobalContext } from '../config/config'
+import NewEvent from '../components/NewEvent'
 
 export default function SchedulesScreen({ navigation }) {
   const { darkTheme, i18n } = useContext(GlobalContext)
+
+  const scheduleColors = [
+    "#F44336",
+    "#E91E63",
+    "#9C27B0",
+    "#3F51B5",
+    "#03A9F4",
+    "#009688",
+    "#8BC34A",
+    "#FFEB3B",
+    "#FF9800",
+    "#FF5722"
+  ]
+
   const [scheduleTitle, setScheduleTitle] = useState('')
+  const [scheduleColor, setScheduleColor] = useState(scheduleColors[0])
+  const [events, setEvents] = useState([])
+
+  const addEvent = () => {
+    const newEvent = {
+      eventName: '',
+      eventHours: 0,
+      eventMinutes: 0,
+    }
+
+    const newEvents = [...events, newEvent]
+    setEvents(newEvents)
+  }
+
+  const removeEvent = index => {
+    const newEvents = events.filter((ev, evIndex) => evIndex !== index)
+    setEvents(newEvents)
+  }
+
+  const setEventName = (index, value) => {
+    const newEvent = events[index]
+    newEvent.eventName = value
+
+    const newEvents = events.map((ev, evIndex) => evIndex !== index ? ev : newEvent)
+    setEvents(newEvents)
+  }
+
+  const setEventHours = (index, value) => {
+    const newEvent = events[index]
+    newEvent.eventHours = value < 24 ? value : 0
+
+    const newEvents = events.map((ev, evIndex) => evIndex !== index ? ev : newEvent)
+    setEvents(newEvents)
+  }
+
+  const setEventMinutes = (index, value) => {
+    const newEvent = events[index]
+    newEvent.eventMinutes = (value < 60 ? value : 0)
+
+    const newEvents = events.map((ev, evIndex) => evIndex !== index ? ev : newEvent)
+    setEvents(newEvents)
+  }
   
   const [styles, colors] = createStyles(darkTheme)
 
@@ -40,12 +98,23 @@ export default function SchedulesScreen({ navigation }) {
           placeholderTextColor={colors.grey}
         />
 
+        <View style={[styles.basic, {paddingHorizontal: 12}]}>
+          <ColorPicker colors={scheduleColors} selectedColor={scheduleColor} onSelect={setScheduleColor} />
+        </View>
+
         <View style={[styles.basic, styles.eventsSectionTitle]}>
           <Text style={[styles.text, {fontSize: 20}]}>{i18n.t('newSchedule.eventTitle')}</Text>
-          <MaterialIcon name='alarm-plus' size={24} style={[styles.text, styles.materialIcon]}
-          onPress={() => console.log('Add event')}
-        />
+          <TouchableHighlight onPress={addEvent} underlayColor={colors.secondaryBackground}>
+            <MaterialIcon name='alarm-plus' size={24} style={[styles.text, styles.materialIcon]} />
+          </TouchableHighlight>
         </View>
+
+        <ScrollView contentContainerStyle={[styles.basic, styles.eventSectionContainer]}>
+          {events.map((ev, index) => <NewEvent key={index} styles={styles} colors={colors} i18n={i18n} ev={ev} index={index}
+              setEventName={setEventName} setEventHours={setEventHours} setEventMinutes={setEventMinutes} removeEvent={removeEvent}
+            />
+          )}
+        </ScrollView>
       </View>
 
       <View style={[styles.basic, {backgroundColor: colors.mainBackground, paddingTop: 10}]}>
@@ -118,13 +187,12 @@ const createStyles = darkTheme => {
       color: colors.mainForeground,
       width: Dimensions.get('window').width - 40,
       borderRadius: 5,
-      marginHorizontal: 20,
-      marginVertical: 10,
       paddingHorizontal: 12,
       paddingVertical: 8,
     },
     scheduleTitleInput: {
-      fontSize: 20
+      fontSize: 20,
+      marginVertical: 10
     },
     eventsSectionTitle: {
       flexDirection: 'row',
@@ -133,9 +201,22 @@ const createStyles = darkTheme => {
       borderBottomColor: colors.mainForeground,
       borderBottomWidth: 1
     },
+    eventSectionContainer: {
+      justifyContent: 'flex-start',
+      width: Dimensions.get('window').width - 40
+    },
     materialIcon: {
       marginTop: 2,
-      padding: 12
+      padding: 12,
+    },
+    eventContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    },
+    eventInput: {
+      paddingVertical: 4,
+      width: Dimensions.get('window').width - 80
     }
   }), colors]
 }

@@ -12,7 +12,10 @@ const en = {
     title: 'New schedule',
     button: 'Add schedule',
     titlePlaceholder: 'Schedule title',
-    eventTitle: 'Events'
+    eventTitle: 'Events',
+    eventPlaceholder: 'Event name',
+    hours: 'Hours',
+    minutes: 'Minutes'
   }
 }
 
@@ -30,7 +33,10 @@ const es = {
     title: 'Nuevo horario',
     button: 'Añadir horario',
     titlePlaceholder: 'Título del horario',
-    eventTitle: 'Eventos'
+    eventTitle: 'Eventos',
+    eventPlaceholder: 'Nombre del evento',
+    hours: 'Horas',
+    minutes: 'Minutos'
   }
 }
 
