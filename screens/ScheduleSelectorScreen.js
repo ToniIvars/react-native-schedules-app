@@ -1,13 +1,14 @@
-import { useContext } from 'react'
-import { StyleSheet, Text, SafeAreaView, View, ScrollView, Platform, StatusBar, Dimensions, TouchableHighlight } from 'react-native'
+import { useContext, useEffect, useState } from 'react'
+import { StyleSheet, Text, SafeAreaView, View, ScrollView, Platform, StatusBar, Dimensions } from 'react-native'
 import { useFonts, OpenSans_400Regular } from '@expo-google-fonts/open-sans'
 import OctIcon from 'react-native-vector-icons/Octicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import { colorPalette, GlobalContext } from '../config/config'
+import SchedulePreview from '../components/SchedulePreview'
 
-export default function SchedulesScreen({ navigation }) {
-  const { darkTheme, i18n } = useContext(GlobalContext)
+export default function ScheduleSelectorScreen({ navigation }) {
+  const { darkTheme, i18n, saveData, schedules, setSchedules } = useContext(GlobalContext)
   
   const [styles, colors] = createStyles(darkTheme)
 
@@ -17,6 +18,13 @@ export default function SchedulesScreen({ navigation }) {
     return null
   }
 
+  const removeSchedule = index => {
+    const newSchedules = schedules.filter((ev, evIndex) => evIndex !== index)
+    setSchedules(newSchedules)
+
+    saveData('@schedules', newSchedules)
+  }
+  
   return (
     <SafeAreaView style={styles.container}>
       <OctIcon name='arrow-left' size={32}
@@ -30,11 +38,10 @@ export default function SchedulesScreen({ navigation }) {
       </View>
 
       <ScrollView style={styles.scheduleSection} contentContainerStyle={[styles.basic, {justifyContent: 'flex-start'}]}>
-        <TouchableHighlight onPress={() => console.log('Yes')} underlayColor={colors.mainBackground} style={styles.basic}>
-          <View style={[styles.basic, styles.schedule]}>
-            <Text style={[styles.text, styles.scheduleTitle]}>Schedule title</Text>
-          </View>
-        </TouchableHighlight>
+        {schedules.map((ev, index) => <SchedulePreview key={index} styles={styles} colors={colors}
+            scheduleTitle={ev.title} index={index} removeSchedule={removeSchedule}
+          />
+        )}
       </ScrollView>
 
       <View style={[styles.basic, {backgroundColor: colors.mainBackground, paddingTop: 10}]}>
@@ -106,11 +113,19 @@ const createStyles = darkTheme => {
       width: Dimensions.get('window').width - 40,
       borderRadius: 5,
       marginVertical: 10,
-      paddingVertical: 12,
-      marginHorizontal: 20
+      marginHorizontal: 20,
+      flexDirection: 'row',
+      justifyContent: 'space-between'
     },
     scheduleTitle: {
-      fontSize: 16
+      fontSize: 16,
+      marginLeft: 12
+    },
+    scheduleRemoveButton: {
+      color: colors.red,
+      marginTop: 2,
+      paddingVertical: 10,
+      paddingHorizontal: 16
     }
   }), colors]
 }

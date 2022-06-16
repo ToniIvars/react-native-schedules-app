@@ -13,7 +13,7 @@ export default function ConfigScreen({ navigation }) {
   const [styles, colors] = createStyles(darkTheme)
 
   const toggleSwitch = () => {
-    readData('@config')
+    readData('@config', {})
       .then(previousConfig => {
         previousConfig.darkTheme = !previousConfig.darkTheme
         saveData('@config', previousConfig)
@@ -23,7 +23,7 @@ export default function ConfigScreen({ navigation }) {
   }
 
   const selectLang = (index, language) => {
-    readData('@config')
+    readData('@config', {})
       .then(previousConfig => {
         previousConfig.language = language
         saveData('@config', previousConfig)

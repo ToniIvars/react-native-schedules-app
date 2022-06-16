@@ -2,7 +2,7 @@ import { Text, View, TextInput, TouchableHighlight } from 'react-native'
 import NumericInput from 'react-native-numeric-input'
 import OctIcon from 'react-native-vector-icons/Octicons'
 
-const NewEvent = ({ styles, colors, i18n, ev, index, setEventName, setEventHours, setEventMinutes, removeEvent}) => {
+const Event = ({ styles, colors, i18n, ev, index, setEventName, setEventHours, setEventMinutes, removeEvent}) => {
   const { eventName, eventHours, eventMinutes } = ev
 
   return (
@@ -52,4 +52,4 @@ const NewEvent = ({ styles, colors, i18n, ev, index, setEventName, setEventHours
   )
 }
 
-export default NewEvent
+export default Event

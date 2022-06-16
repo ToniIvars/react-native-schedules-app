@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import MainScreen from './screens/MainScreen'
 import ConfigScreen from './screens/ConfigScreen'
-import SchedulesScreen from './screens/SchedulesScreen'
+import ScheduleSelectorScreen from './screens/ScheduleSelectorScreen'
 import NewScheduleScreen from './screens/NewScheduleScreen'
 import { en, es } from './i18n/translations'
 import { GlobalContext, languages } from './config/config'
@@ -17,10 +17,10 @@ const Stack = createNativeStackNavigator()
 i18n.translations = { en, es }
 i18n.fallbacks = true
 
-const readData = async (key) => {
+const readData = async (key, emptyItem) => {
   try {
     const item = await AsyncStorage.getItem(key)
-    return item !== null ? JSON.parse(item) : {}
+    return item !== null ? JSON.parse(item) : emptyItem
 
   } catch(e) {
     console.error(e)
@@ -40,11 +40,12 @@ const saveData = async (key, value) => {
 export default function App() {
   const [darkTheme, setDarkTheme] = useState(true)
   const [language, setLanguage] = useState(Localization.locale.substring(0, 2))
+  const [schedules, setSchedules] = useState([])
 
   const changeLanguage = lang => setLanguage(languages[lang])
-
+  
   useEffect(() => {
-    readData('@config')
+    readData('@config', {})
       .then(config => {
         if (config.darkTheme !== undefined) {
           setDarkTheme(config.darkTheme)
@@ -54,6 +55,9 @@ export default function App() {
           changeLanguage(config.language)
         }
       })
+
+    readData('@schedules', [])
+      .then(storageSchedules => setSchedules(storageSchedules))
   }, [])
 
   i18n.locale = language
@@ -65,7 +69,9 @@ export default function App() {
     changeLanguage: changeLanguage,
     i18n: i18n,
     readData: readData,
-    saveData: saveData
+    saveData: saveData,
+    schedules: schedules,
+    setSchedules, setSchedules
   }
 
   return (
@@ -74,7 +80,7 @@ export default function App() {
         <Stack.Navigator screenOptions={{headerShown: false}}>
           <Stack.Screen name='Main' component={MainScreen} />
           <Stack.Screen name='Configuration' component={ConfigScreen} />
-          <Stack.Screen name='Schedules' component={SchedulesScreen} />
+          <Stack.Screen name='Schedules' component={ScheduleSelectorScreen} />
           <Stack.Screen name='New Schedule' component={NewScheduleScreen} />
         </Stack.Navigator>
       </GlobalContext.Provider>

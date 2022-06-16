@@ -6,10 +6,10 @@ import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { ColorPicker } from 'react-native-btr'
 
 import { colorPalette, GlobalContext } from '../config/config'
-import NewEvent from '../components/NewEvent'
+import Event from '../components/Event'
 
-export default function SchedulesScreen({ navigation }) {
-  const { darkTheme, i18n } = useContext(GlobalContext)
+export default function NewScheduleScreen({ navigation }) {
+  const { darkTheme, i18n, readData, saveData, setSchedules } = useContext(GlobalContext)
 
   const scheduleColors = [
     "#F44336",
@@ -67,6 +67,24 @@ export default function SchedulesScreen({ navigation }) {
     const newEvents = events.map((ev, evIndex) => evIndex !== index ? ev : newEvent)
     setEvents(newEvents)
   }
+
+  const saveSchedule = () => {
+    readData('@schedules', [])
+      .then(previousSchedules => {
+        const schedule = {
+          title: scheduleTitle,
+          color: scheduleColor,
+          events: events
+        }
+
+        const newSchedules = [...previousSchedules, schedule]
+        setSchedules(newSchedules)
+
+        saveData('@schedules', newSchedules)
+      })
+
+    navigation.navigate('Schedules')
+  }
   
   const [styles, colors] = createStyles(darkTheme)
 
@@ -110,7 +128,7 @@ export default function SchedulesScreen({ navigation }) {
         </View>
 
         <ScrollView contentContainerStyle={[styles.basic, styles.eventSectionContainer]}>
-          {events.map((ev, index) => <NewEvent key={index} styles={styles} colors={colors} i18n={i18n} ev={ev} index={index}
+          {events.map((ev, index) => <Event key={index} styles={styles} colors={colors} i18n={i18n} ev={ev} index={index}
               setEventName={setEventName} setEventHours={setEventHours} setEventMinutes={setEventMinutes} removeEvent={removeEvent}
             />
           )}
@@ -119,7 +137,7 @@ export default function SchedulesScreen({ navigation }) {
 
       <View style={[styles.basic, {backgroundColor: colors.mainBackground, paddingTop: 10}]}>
         <OctIcon.Button style={styles.addSchedule} backgroundColor={colors.mainBackground} underlayColor={colors.mainBackground}
-          name='plus' size={30} onPress={() => console.log('Button pressed')}
+          name='plus' size={30} onPress={saveSchedule}
         >
           <Text style={styles.addScheduleText}>{i18n.t('newSchedule.button')}</Text>
         </OctIcon.Button>
