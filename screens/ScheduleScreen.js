@@ -94,12 +94,16 @@ export default function ScheduleScreen({ route, navigation }) {
         }
 
         if (isNewSchedule) {
+          schedule.inUse = previousSchedules.length > 0 ? false : true
+
           const newSchedules = [...previousSchedules, schedule]
           setSchedules(newSchedules)
 
           saveData('@schedules', newSchedules)
 
         } else {
+          schedule.inUse = previousSchedules[index].inUse
+
           const newSchedules = previousSchedules
           newSchedules.splice(index, 1, schedule)
 

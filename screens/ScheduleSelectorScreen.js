@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, ScrollView, Platform, StatusBar, Dimensions } from 'react-native'
 import { useFonts, OpenSans_400Regular } from '@expo-google-fonts/open-sans'
 import OctIcon from 'react-native-vector-icons/Octicons'
@@ -16,6 +16,17 @@ export default function ScheduleSelectorScreen({ navigation }) {
 
   if (!fontsLoaded) {
     return null
+  }
+
+  const selectSchedule = index => {
+    const newSchedules = schedules.map((ev, evIndex) => {
+      ev.inUse = index === evIndex ? true : false
+      return ev
+    })
+
+    setSchedules(newSchedules)
+
+    saveData('@schedules', newSchedules)
   }
 
   const removeSchedule = index => {
@@ -39,7 +50,7 @@ export default function ScheduleSelectorScreen({ navigation }) {
 
       <ScrollView style={styles.scheduleSection} contentContainerStyle={[styles.basic, {justifyContent: 'flex-start'}]}>
         {schedules.map((ev, index) => <SchedulePreview key={index} styles={styles} colors={colors}
-            scheduleTitle={ev.title} index={index} removeSchedule={removeSchedule} navigation={navigation}
+            schedule={ev} index={index} removeSchedule={removeSchedule} selectSchedule={selectSchedule}navigation={navigation}
           />
         )}
       </ScrollView>
@@ -112,14 +123,14 @@ const createStyles = darkTheme => {
       backgroundColor: colors.secondaryBackground,
       width: Dimensions.get('window').width - 40,
       borderRadius: 5,
-      marginVertical: 10,
+      marginVertical: 6,
       marginHorizontal: 20,
       flexDirection: 'row',
       justifyContent: 'space-between'
     },
     scheduleTitle: {
       fontSize: 16,
-      marginLeft: 12
+      marginLeft: 10
     },
     scheduleRemoveButton: {
       color: colors.red,
