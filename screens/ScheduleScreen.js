@@ -21,7 +21,6 @@ export default function ScheduleScreen({ route, navigation }) {
     "#03A9F4",
     "#009688",
     "#8BC34A",
-    "#FFEB3B",
     "#FF9800",
     "#FF5722"
   ]
