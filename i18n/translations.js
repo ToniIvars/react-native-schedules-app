@@ -16,6 +16,10 @@ const en = {
     eventPlaceholder: 'Event name',
     hours: 'Hours',
     minutes: 'Minutes'
+  },
+  editSchedule : {
+    title: 'Edit schedule',
+    button: 'Update schedule'
   }
 }
 
@@ -37,6 +41,10 @@ const es = {
     eventPlaceholder: 'Nombre del evento',
     hours: 'Horas',
     minutes: 'Minutos'
+  },
+  editSchedule : {
+    title: 'Editar horario',
+    button: 'Actualizar horario'
   }
 }
 

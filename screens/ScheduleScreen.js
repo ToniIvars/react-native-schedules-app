@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, Platform, StatusBar, Dimensions, TextInput, ScrollView, TouchableHighlight } from 'react-native'
 import { useFonts, OpenSans_400Regular } from '@expo-google-fonts/open-sans'
 import OctIcon from 'react-native-vector-icons/Octicons'
@@ -8,7 +8,9 @@ import { ColorPicker } from 'react-native-btr'
 import { colorPalette, GlobalContext } from '../config/config'
 import Event from '../components/Event'
 
-export default function NewScheduleScreen({ navigation }) {
+export default function ScheduleScreen({ route, navigation }) {
+  const { isNewSchedule, index } = route.params
+
   const { darkTheme, i18n, readData, saveData, setSchedules } = useContext(GlobalContext)
 
   const scheduleColors = [
@@ -27,6 +29,20 @@ export default function NewScheduleScreen({ navigation }) {
   const [scheduleTitle, setScheduleTitle] = useState('')
   const [scheduleColor, setScheduleColor] = useState(scheduleColors[0])
   const [events, setEvents] = useState([])
+
+  // Load the state of the schedule if it is an existent one
+  useEffect(() => {
+    if (!isNewSchedule) {
+      readData('@schedules', [])
+      .then(previousSchedules => {
+        const { title, color, events } = previousSchedules[index]
+
+        setScheduleTitle(title)
+        setScheduleColor(color)
+        setEvents(events)
+      })
+    }
+  }, [])
 
   const addEvent = () => {
     const newEvent = {
@@ -77,10 +93,20 @@ export default function NewScheduleScreen({ navigation }) {
           events: events
         }
 
-        const newSchedules = [...previousSchedules, schedule]
-        setSchedules(newSchedules)
+        if (isNewSchedule) {
+          const newSchedules = [...previousSchedules, schedule]
+          setSchedules(newSchedules)
 
-        saveData('@schedules', newSchedules)
+          saveData('@schedules', newSchedules)
+
+        } else {
+          const newSchedules = previousSchedules
+          newSchedules.splice(index, 1, schedule)
+
+          setSchedules(newSchedules)
+
+          saveData('@schedules', newSchedules)
+        }        
       })
 
     navigation.navigate('Schedules')
@@ -103,7 +129,7 @@ export default function NewScheduleScreen({ navigation }) {
 
       <View style={[styles.basic, styles.titleBar]}>
         <MaterialIcon name='timetable' size={28} style={[styles.text, {marginTop: 6, paddingRight: 10}]} />
-        <Text style={[styles.text, styles.screenTitle]}>{i18n.t('newSchedule.title')}</Text>
+        <Text style={[styles.text, styles.screenTitle]}>{i18n.t(`${isNewSchedule ? 'newSchedule' : 'editSchedule'}.title`)}</Text>
       </View>
 
       <View style={[styles.basic, styles.scheduleSection]}>
@@ -139,7 +165,7 @@ export default function NewScheduleScreen({ navigation }) {
         <OctIcon.Button style={styles.addSchedule} backgroundColor={colors.mainBackground} underlayColor={colors.mainBackground}
           name='plus' size={30} onPress={saveSchedule}
         >
-          <Text style={styles.addScheduleText}>{i18n.t('newSchedule.button')}</Text>
+          <Text style={styles.addScheduleText}>{i18n.t(`${isNewSchedule ? 'newSchedule' : 'editSchedule'}.button`)}</Text>
         </OctIcon.Button>
       </View>
     </SafeAreaView>

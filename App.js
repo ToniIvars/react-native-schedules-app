@@ -8,7 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import MainScreen from './screens/MainScreen'
 import ConfigScreen from './screens/ConfigScreen'
 import ScheduleSelectorScreen from './screens/ScheduleSelectorScreen'
-import NewScheduleScreen from './screens/NewScheduleScreen'
+import ScheduleScreen from './screens/ScheduleScreen'
 import { en, es } from './i18n/translations'
 import { GlobalContext, languages } from './config/config'
 
@@ -81,7 +81,8 @@ export default function App() {
           <Stack.Screen name='Main' component={MainScreen} />
           <Stack.Screen name='Configuration' component={ConfigScreen} />
           <Stack.Screen name='Schedules' component={ScheduleSelectorScreen} />
-          <Stack.Screen name='New Schedule' component={NewScheduleScreen} />
+          <Stack.Screen name='New Schedule' component={ScheduleScreen} initialParams={{isNewSchedule: true}} />
+          <Stack.Screen name='Edit Schedule' component={ScheduleScreen} initialParams={{isNewSchedule: false}} />
         </Stack.Navigator>
       </GlobalContext.Provider>
     </NavigationContainer>

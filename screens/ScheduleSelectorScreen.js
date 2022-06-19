@@ -39,7 +39,7 @@ export default function ScheduleSelectorScreen({ navigation }) {
 
       <ScrollView style={styles.scheduleSection} contentContainerStyle={[styles.basic, {justifyContent: 'flex-start'}]}>
         {schedules.map((ev, index) => <SchedulePreview key={index} styles={styles} colors={colors}
-            scheduleTitle={ev.title} index={index} removeSchedule={removeSchedule}
+            scheduleTitle={ev.title} index={index} removeSchedule={removeSchedule} navigation={navigation}
           />
         )}
       </ScrollView>
