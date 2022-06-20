@@ -28,6 +28,7 @@ export default function ScheduleScreen({ route, navigation }) {
   const [scheduleTitle, setScheduleTitle] = useState('')
   const [scheduleColor, setScheduleColor] = useState(scheduleColors[0])
   const [events, setEvents] = useState([])
+  const [error, setError] = useState('')
 
   // Load the state of the schedule if it is an existent one
   useEffect(() => {
@@ -42,6 +43,39 @@ export default function ScheduleScreen({ route, navigation }) {
       })
     }
   }, [])
+
+  const checkIsCorrect = (schedule, previousSchedules) => {
+    if (!isNewSchedule) {
+      previousSchedules = previousSchedules.filter((ev, evIndex) => evIndex !== index)
+    }
+
+    const previousSchedulesTitles = previousSchedules.map(sch => sch.title)
+
+    if (!schedule.title || previousSchedulesTitles.includes(schedule.title)) {
+      return [false, i18n.t('scheduleCreation.invalidTitle')]
+    }
+
+    const scheduleEvents = schedule.events
+
+    if (scheduleEvents.length === 0) {
+      return [false, i18n.t('scheduleCreation.noEvents')]
+    }
+
+    if (scheduleEvents.some(event => !event.eventName.trim())) {
+      return [false, i18n.t('scheduleCreation.invalidEventsTitles')]
+    }
+
+    const scheduleEventsHours = schedule.events.map(event => event.eventHours)
+    const scheduleEventsMinutes = schedule.events.map(event => event.eventMinutes)
+
+    if (scheduleEvents.some(({ eventHours, eventMinutes }) => scheduleEventsHours.filter(hours => hours === eventHours).length > 1 &&
+      scheduleEventsMinutes.filter(minutes => minutes === eventMinutes).length > 1)
+    ) {
+      return [false, i18n.t('scheduleCreation.invalidEventsTimes')]
+    }
+
+    return [true, '']
+  }
 
   const addEvent = () => {
     const newEvent = {
@@ -87,9 +121,16 @@ export default function ScheduleScreen({ route, navigation }) {
     readData('@schedules', [])
       .then(previousSchedules => {
         const schedule = {
-          title: scheduleTitle,
+          title: scheduleTitle.trim(),
           color: scheduleColor,
           events: events
+        }
+
+        const [isCorrect, message] = checkIsCorrect(schedule, previousSchedules)
+
+        if (!isCorrect) {
+          setError(message)
+          return false
         }
 
         if (isNewSchedule) {
@@ -109,10 +150,11 @@ export default function ScheduleScreen({ route, navigation }) {
           setSchedules(newSchedules)
 
           saveData('@schedules', newSchedules)
-        }        
+        }
+        
+        return true
       })
-
-    navigation.navigate('Schedules')
+      .then(prev => prev && navigation.navigate('Schedules'))
   }
   
   const [styles, colors] = createStyles(darkTheme)
@@ -134,6 +176,10 @@ export default function ScheduleScreen({ route, navigation }) {
         <MaterialIcon name='timetable' size={28} style={[styles.text, {marginTop: 6, paddingRight: 10}]} />
         <Text style={[styles.text, styles.screenTitle]}>{i18n.t(`${isNewSchedule ? 'newSchedule' : 'editSchedule'}.title`)}</Text>
       </View>
+
+      {error.length > 0 && 
+        <Text style={[styles.text, styles.errorMessage]}>{error}</Text>
+      }
 
       <View style={[styles.basic, styles.scheduleSection]}>
         <TextInput
@@ -264,6 +310,13 @@ const createStyles = darkTheme => {
     eventInput: {
       paddingVertical: 4,
       width: Dimensions.get('window').width - 80
+    },
+    errorMessage: {
+      backgroundColor: colors.red,
+      width: '100%',
+      textAlign: 'center',
+      paddingVertical: 10,
+      fontSize: 16,
     }
   }), colors]
 }

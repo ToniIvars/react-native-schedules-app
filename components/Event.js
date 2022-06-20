@@ -15,6 +15,7 @@ const Event = ({ styles, colors, i18n, ev, index, setEventName, setEventHours, s
         maxLength={30}
         placeholder={i18n.t('newSchedule.eventPlaceholder')}
         placeholderTextColor={colors.grey}
+        autoFocus
       />
       <TouchableHighlight onPress={() => removeEvent(index)} underlayColor={colors.secondaryBackground}>
         <OctIcon name='x' size={24} style={[styles.text, styles.materialIcon, {color: colors.red}]} />

@@ -20,6 +20,12 @@ const en = {
   editSchedule : {
     title: 'Edit schedule',
     button: 'Update schedule'
+  },
+  scheduleCreation: {
+    invalidTitle: 'The schedule title is invalid',
+    noEvents: 'There are no events in the schedule',
+    invalidEventsTitles: 'The events titles are empty',
+    invalidEventsTimes: 'The events times cannot be the same'
   }
 }
 
@@ -45,6 +51,12 @@ const es = {
   editSchedule : {
     title: 'Editar horario',
     button: 'Actualizar horario'
+  },
+  scheduleCreation: {
+    invalidTitle: 'El título del horario no es válido',
+    noEvents: 'No hay eventos en el horario',
+    invalidEventsTitles: 'Los títulos de los eventos están vacíos',
+    invalidEventsTimes: 'Las horas de los eventos deben ser diferentes'
   }
 }
 
