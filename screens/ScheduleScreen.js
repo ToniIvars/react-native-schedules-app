@@ -120,6 +120,13 @@ export default function ScheduleScreen({ route, navigation }) {
   const saveSchedule = () => {
     readData('@schedules', [])
       .then(previousSchedules => {
+        
+        // Sort by minutes
+        events.sort((a, b) => a.eventMinutes - b.eventMinutes)
+        
+        // Sort by hours
+        events.sort((a, b) => a.eventHours - b.eventHours)
+        
         const schedule = {
           title: scheduleTitle.trim(),
           color: scheduleColor,
