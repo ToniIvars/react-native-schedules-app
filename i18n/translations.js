@@ -1,4 +1,7 @@
 const en = {
+  main: {
+    noNextEvent: 'There is no next event'
+  },
   config: {
     title: 'Configuration',
     darkTheme: 'Dark theme',
@@ -30,6 +33,9 @@ const en = {
 }
 
 const es = {
+  main: {
+    noNextEvent: 'No hay siguiente evento'
+  },
   config: {
     title: 'Configuración',
     darkTheme: 'Tema oscuro',

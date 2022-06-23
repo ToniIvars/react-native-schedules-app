@@ -8,7 +8,7 @@ import dayjs from 'dayjs'
 import { colorPalette, GlobalContext } from '../config/config'
 
 export default function MainScreen({ navigation }) {
-  const { darkTheme, scheduleInUse } = useContext(GlobalContext)
+  const { darkTheme, i18n, scheduleInUse } = useContext(GlobalContext)
 
   const [currentEvent, setCurrentEvent] = useState({})
   const [nextEvent, setNextEvent] = useState({})
@@ -85,7 +85,7 @@ export default function MainScreen({ navigation }) {
         <Text numberOfLines={1} style={styles.text}>
           {Object.keys(nextEvent).length > 0
             ? `(${getEventTime(nextEvent)})  ${nextEvent.eventName}`
-            : 'There is no next event'}
+            : i18n.t('main.noNextEvent')}
         </Text>
       </View>
     </SafeAreaView>
