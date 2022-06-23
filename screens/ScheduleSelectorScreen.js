@@ -8,7 +8,7 @@ import { colorPalette, GlobalContext } from '../config/config'
 import SchedulePreview from '../components/SchedulePreview'
 
 export default function ScheduleSelectorScreen({ navigation }) {
-  const { darkTheme, i18n, saveData, schedules, setSchedules } = useContext(GlobalContext)
+  const { darkTheme, i18n, saveData, schedules, setSchedules, setScheduleInUse } = useContext(GlobalContext)
   
   const [styles, colors] = createStyles(darkTheme)
 
@@ -21,6 +21,10 @@ export default function ScheduleSelectorScreen({ navigation }) {
   const selectSchedule = index => {
     const newSchedules = schedules.map((ev, evIndex) => {
       ev.inUse = index === evIndex ? true : false
+      if (ev.inUse) {
+        setScheduleInUse(ev)
+      }
+      
       return ev
     })
 

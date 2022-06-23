@@ -41,6 +41,7 @@ export default function App() {
   const [darkTheme, setDarkTheme] = useState(true)
   const [language, setLanguage] = useState(Localization.locale.substring(0, 2))
   const [schedules, setSchedules] = useState([])
+  const [scheduleInUse, setScheduleInUse] = useState({})
 
   const changeLanguage = lang => setLanguage(languages[lang])
   
@@ -56,8 +57,13 @@ export default function App() {
         }
       })
 
-    readData('@schedules', [])
-      .then(storageSchedules => setSchedules(storageSchedules))
+      readData('@schedules', [])
+      .then(storageSchedules => {
+        setSchedules(storageSchedules)
+
+        const storageScheduleInUse = storageSchedules.filter(schedule => schedule.inUse)[0]
+        setScheduleInUse(storageScheduleInUse)
+      })
   }, [])
 
   i18n.locale = language
@@ -71,7 +77,9 @@ export default function App() {
     readData: readData,
     saveData: saveData,
     schedules: schedules,
-    setSchedules, setSchedules
+    setSchedules, setSchedules,
+    scheduleInUse: scheduleInUse,
+    setScheduleInUse, setScheduleInUse
   }
 
   return (

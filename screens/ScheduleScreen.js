@@ -11,7 +11,7 @@ import Event from '../components/Event'
 export default function ScheduleScreen({ route, navigation }) {
   const { isNewSchedule, index } = route.params
 
-  const { darkTheme, i18n, readData, saveData, setSchedules } = useContext(GlobalContext)
+  const { darkTheme, i18n, readData, saveData, setSchedules, setScheduleInUse } = useContext(GlobalContext)
 
   const scheduleColors = [
     "#F44336",
@@ -150,6 +150,10 @@ export default function ScheduleScreen({ route, navigation }) {
           setSchedules(newSchedules)
 
           saveData('@schedules', newSchedules)
+        }
+
+        if (schedule.inUse) {
+          setScheduleInUse(schedule)
         }
         
         return true

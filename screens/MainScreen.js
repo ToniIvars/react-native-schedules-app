@@ -1,17 +1,45 @@
-import { useContext} from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, Platform, StatusBar } from 'react-native'
 import { useFonts, OpenSans_400Regular } from '@expo-google-fonts/open-sans'
 import OctIcon from 'react-native-vector-icons/Octicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import dayjs from 'dayjs'
 
 import { colorPalette, GlobalContext } from '../config/config'
 
 export default function MainScreen({ navigation }) {
-  const { darkTheme } = useContext(GlobalContext)
+  const { darkTheme, scheduleInUse } = useContext(GlobalContext)
+
+  const [currentEvent, setCurrentEvent] = useState({})
+  const [nextEvent, setNextEvent] = useState({})
+
+  const eventBeforeNow = (event) => {
+    const {eventHours, eventMinutes} = event
+    const [currentHours, currentMinutes] = dayjs().format('HH:mm').split(':')
+
+    return parseInt(currentHours) >= eventHours && parseInt(currentMinutes) >= eventMinutes
+  }
+
+  useEffect(() => {
+    if (Object.keys(scheduleInUse).length > 0) {
+      const possibleEvents = scheduleInUse.events.filter(scheduleEvent => eventBeforeNow(scheduleEvent))
+
+      if (possibleEvents.length < 2) {
+        setCurrentEvent(possibleEvents.length === 1 ? possibleEvents[0] : scheduleInUse.events[scheduleInUse.events.length - 1])
+
+      } else {
+        setCurrentEvent(possibleEvents[0])
+        setNextEvent(possibleEvents[1])
+      }
+      
+    }
+  }, [scheduleInUse])
 
   const styles = createStyles(darkTheme)
 
   const [fontsLoaded] = useFonts({OpenSans_400Regular})
+
+  const getEventTime = event => dayjs().hour(event.eventHours).minute(event.eventMinutes).format('HH:mm')
 
   if (!fontsLoaded) {
     return null
@@ -23,20 +51,26 @@ export default function MainScreen({ navigation }) {
         <OctIcon name='gear' size={24} style={[styles.text, {marginTop: 2, padding: 12}]}
           onPress={() => navigation.navigate('Configuration')}
         />
-        <Text style={[styles.text, styles.scheduleTitle]}>Schedule title</Text>
+        <Text style={[styles.text, styles.scheduleTitle]}>{scheduleInUse.title}</Text>
         <MaterialIcon name='timetable' size={28} style={[styles.text, {marginTop: 6, padding: 12}]}
           onPress={() => navigation.navigate('Schedules')}
         />
       </View>
 
-      <View style={[styles.basic, styles.currentEvent]}>
-        <Text style={[styles.text, styles.clock]}>00:00</Text>
-        <Text style={[styles.text, styles.currentEventName]}>This will be the event name</Text>
-      </View>
+      {Object.keys(scheduleInUse).length > 0 &&
+        <View style={[styles.basic, styles.currentEvent]}>
+          <Text style={[styles.text, styles.clock, {color: scheduleInUse.color}]}>{getEventTime(currentEvent)}</Text>
+          <Text style={[styles.text, styles.currentEventName, {color: scheduleInUse.color}]}>{currentEvent.eventName}</Text>
+        </View>
+      }
 
       <View style={[styles.basic, styles.nextEvent]}>
         <OctIcon name='chevron-right' size={24} style={[styles.text, {marginRight: 10}]} />
-        <Text numberOfLines={1} style={styles.text}>This will be the information for the next event</Text>
+        <Text numberOfLines={1} style={styles.text}>
+          {Object.keys(nextEvent).length > 0
+            ? `(${getEventTime(nextEvent)})  ${nextEvent.eventName}`
+            : 'There is no next event'}
+        </Text>
       </View>
     </SafeAreaView>
   )
