@@ -17,21 +17,37 @@ export default function MainScreen({ navigation }) {
     const {eventHours, eventMinutes} = event
     const [currentHours, currentMinutes] = dayjs().format('HH:mm').split(':')
 
-    return parseInt(currentHours) >= eventHours && parseInt(currentMinutes) >= eventMinutes
+    return parseInt(currentHours) === eventHours
+      ? parseInt(currentMinutes) >= eventMinutes
+      : parseInt(currentHours) > eventHours
   }
 
   useEffect(() => {
-    if (Object.keys(scheduleInUse).length > 0) {
-      const possibleEvents = scheduleInUse.events.filter(scheduleEvent => eventBeforeNow(scheduleEvent))
+    if (Object.keys(scheduleInUse).length > 0) { // Check if there is any scheduleInUse (wait for it to be loaded)
+      setNextEvent({}) // Reset the next event ecery time the scheduleInUse changes
 
-      if (possibleEvents.length < 2) {
-        setCurrentEvent(possibleEvents.length === 1 ? possibleEvents[0] : scheduleInUse.events[scheduleInUse.events.length - 1])
+      const scheduleEvents = scheduleInUse.events
+      const possibleEvents = scheduleEvents.filter(scheduleEvent => eventBeforeNow(scheduleEvent))
+
+      if (possibleEvents.length > 0) {
+        const _currentEvent = possibleEvents[possibleEvents.length - 1]
+
+        setCurrentEvent(_currentEvent)
+
+        if (scheduleEvents.length > 1) {
+          const _currentEventIndex = scheduleEvents.findIndex(el => el === _currentEvent)
+
+          // If the current event is the last of the schedule events then set the next event to the first one
+          setNextEvent(scheduleEvents[_currentEventIndex < scheduleEvents.length - 1 ? _currentEventIndex : 0])
+        }
 
       } else {
-        setCurrentEvent(possibleEvents[0])
-        setNextEvent(possibleEvents[1])
+        setCurrentEvent(scheduleEvents[scheduleEvents.length - 1])
+
+        if (scheduleEvents.length > 1) {
+          setNextEvent(scheduleEvents[0])
+        }
       }
-      
     }
   }, [scheduleInUse])
 
