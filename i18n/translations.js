@@ -9,7 +9,11 @@ const en = {
   },
   schedules: {
     title: 'Schedules',
-    button: 'New schedule'
+    button: 'New schedule',
+    alertTitle: 'Removal confirmation',
+    alertMsg: 'Are you sure you want the schedule to be removed? This operation is irreversible.',
+    alertBtnCancel: 'Cancel',
+    alertBtnOK: 'Remove'
   },
   newSchedule : {
     title: 'New schedule',
@@ -43,7 +47,11 @@ const es = {
   },
   schedules: {
     title: 'Horarios',
-    button: 'Nuevo horario'
+    button: 'Nuevo horario',
+    alertTitle: 'Confirma la eliminación',
+    alertMsg: '¿Estás seguro de que quieres eliminar el horario? Esta operación es irreversible.',
+    alertBtnCancel: 'Cancelar',
+    alertBtnOK: 'Eliminar'
   },
   newSchedule : {
     title: 'Nuevo horario',

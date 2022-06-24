@@ -1,7 +1,7 @@
 import { Text, View, TouchableHighlight } from 'react-native'
 import OctIcon from 'react-native-vector-icons/Octicons'
 
-const Event = ({ styles, colors, schedule, index, removeSchedule, selectSchedule, navigation }) => {
+const Event = ({ styles, colors, schedule, index, showAlert, selectSchedule, navigation }) => {
   const { title, color, inUse } = schedule
   return (
     <TouchableHighlight
@@ -12,7 +12,7 @@ const Event = ({ styles, colors, schedule, index, removeSchedule, selectSchedule
     >
       <View style={[styles.basic, styles.schedule, {borderColor: inUse ? color : colors.secondaryBackground, borderWidth: 4}]}>
         <Text style={[styles.text, styles.scheduleTitle]}>{title}</Text>
-        <TouchableHighlight onPress={() => removeSchedule(index)} underlayColor={colors.mainBackground}>
+        <TouchableHighlight onPress={() => showAlert(index)} underlayColor={colors.mainBackground}>
           <OctIcon name='x' size={28} style={styles.scheduleRemoveButton} />
         </TouchableHighlight>
       </View>

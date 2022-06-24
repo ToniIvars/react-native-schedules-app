@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { StyleSheet, Text, SafeAreaView, View, ScrollView, Platform, StatusBar, Dimensions } from 'react-native'
+import { StyleSheet, Text, SafeAreaView, View, ScrollView, Platform, StatusBar, Dimensions, Alert } from 'react-native'
 import { useFonts, OpenSans_400Regular } from '@expo-google-fonts/open-sans'
 import OctIcon from 'react-native-vector-icons/Octicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -39,6 +39,21 @@ export default function ScheduleSelectorScreen({ navigation }) {
 
     saveData('@schedules', newSchedules)
   }
+
+  const showAlert = index => {
+    Alert.alert(
+      i18n.t('schedules.alertTitle'),
+      i18n.t('schedules.alertMsg'),
+      [
+        {
+          text: i18n.t('schedules.alertBtnCancel'),
+          onPress: () => console.log('Canceled'),
+          style: "cancel"
+        },
+        { text: i18n.t('schedules.alertBtnOK'), onPress: () => removeSchedule(index) }
+      ]
+    )
+  }
   
   return (
     <SafeAreaView style={styles.container}>
@@ -54,7 +69,7 @@ export default function ScheduleSelectorScreen({ navigation }) {
 
       <ScrollView style={styles.scheduleSection} contentContainerStyle={[styles.basic, {justifyContent: 'flex-start'}]}>
         {schedules.map((ev, index) => <SchedulePreview key={index} styles={styles} colors={colors}
-            schedule={ev} index={index} removeSchedule={removeSchedule} selectSchedule={selectSchedule}navigation={navigation}
+            schedule={ev} index={index} showAlert={showAlert} selectSchedule={selectSchedule}navigation={navigation}
           />
         )}
       </ScrollView>
