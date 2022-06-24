@@ -38,7 +38,7 @@ export default function MainScreen({ navigation }) {
           const _currentEventIndex = scheduleEvents.findIndex(el => el === _currentEvent)
 
           // If the current event is the last of the schedule events then set the next event to the first one
-          setNextEvent(scheduleEvents[_currentEventIndex < scheduleEvents.length - 1 ? _currentEventIndex : 0])
+          setNextEvent(scheduleEvents[_currentEventIndex < scheduleEvents.length - 1 ? _currentEventIndex + 1 : 0])
         }
 
       } else {
