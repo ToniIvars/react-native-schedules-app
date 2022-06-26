@@ -62,7 +62,7 @@ export default function App() {
         setSchedules(storageSchedules)
 
         const storageScheduleInUse = storageSchedules.filter(schedule => schedule.inUse)[0]
-        setScheduleInUse(storageScheduleInUse)
+        setScheduleInUse(storageScheduleInUse ? storageScheduleInUse : {})
       })
   }, [])
 

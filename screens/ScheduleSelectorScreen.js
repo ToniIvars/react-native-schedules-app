@@ -34,8 +34,15 @@ export default function ScheduleSelectorScreen({ navigation }) {
   }
 
   const removeSchedule = index => {
-    const newSchedules = schedules.filter((ev, evIndex) => evIndex !== index)
+    let newSchedules = schedules.filter((ev, evIndex) => evIndex !== index)
+
+    if (schedules[index].inUse && newSchedules.length > 0) newSchedules[0].inUse = true
+
     setSchedules(newSchedules)
+      
+    const scheduleInUse = newSchedules.filter(schedule => schedule.inUse)[0]
+    
+    setScheduleInUse(scheduleInUse ? scheduleInUse : {})
 
     saveData('@schedules', newSchedules)
   }
@@ -59,7 +66,7 @@ export default function ScheduleSelectorScreen({ navigation }) {
     <SafeAreaView style={styles.container}>
       <OctIcon name='arrow-left' size={32}
         style={styles.goBackIcon}
-        onPress={navigation.goBack}
+        onPress={() => navigation.navigate('Main')}
       />
 
       <View style={[styles.basic, styles.titleBar]}>

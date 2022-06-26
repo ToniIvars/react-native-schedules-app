@@ -1,6 +1,9 @@
 const en = {
   main: {
-    noNextEvent: 'There is no next event'
+    noNextEvent: 'There is no next event',
+    noScheduleTitle: 'No schedule',
+    noScheduleText: "Haven't created any schedule yet?",
+    noScheduleButton: 'Create schedule now'
   },
   config: {
     title: 'Configuration',
@@ -38,7 +41,10 @@ const en = {
 
 const es = {
   main: {
-    noNextEvent: 'No hay siguiente evento'
+    noNextEvent: 'No hay siguiente evento',
+    noScheduleTitle: 'Sin horario',
+    noScheduleText: '¿No has creado ningún horario todavía?',
+    noScheduleButton: 'Crear horario ahora'
   },
   config: {
     title: 'Configuración',

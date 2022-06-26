@@ -1,11 +1,12 @@
 import { useContext, useState, useEffect } from 'react'
-import { StyleSheet, Text, SafeAreaView, View, Platform, StatusBar } from 'react-native'
+import { StyleSheet, Text, SafeAreaView, View, Platform, StatusBar, Button } from 'react-native'
 import { useFonts, OpenSans_400Regular } from '@expo-google-fonts/open-sans'
 import OctIcon from 'react-native-vector-icons/Octicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import dayjs from 'dayjs'
 
 import { colorPalette, GlobalContext } from '../config/config'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function MainScreen({ navigation }) {
   const { darkTheme, i18n, scheduleInUse } = useContext(GlobalContext)
@@ -51,7 +52,7 @@ export default function MainScreen({ navigation }) {
     }
   }, [scheduleInUse])
 
-  const styles = createStyles(darkTheme)
+  const [styles, colors] = createStyles(darkTheme)
 
   const [fontsLoaded] = useFonts({OpenSans_400Regular})
 
@@ -67,16 +68,21 @@ export default function MainScreen({ navigation }) {
         <OctIcon name='gear' size={24} style={[styles.text, {marginTop: 2, padding: 12}]}
           onPress={() => navigation.navigate('Configuration')}
         />
-        <Text style={[styles.text, styles.scheduleTitle]}>{scheduleInUse.title}</Text>
+        <Text style={[styles.text, styles.scheduleTitle]}>{scheduleInUse.title ? scheduleInUse.title : i18n.t('main.noScheduleTitle')}</Text>
         <MaterialIcon name='timetable' size={28} style={[styles.text, {marginTop: 6, padding: 12}]}
           onPress={() => navigation.navigate('Schedules')}
         />
       </View>
 
-      {Object.keys(scheduleInUse).length > 0 &&
+      {Object.keys(scheduleInUse).length > 0 ?
         <View style={[styles.basic, styles.currentEvent]}>
           <Text style={[styles.text, styles.clock, {color: scheduleInUse.color}]}>{getEventTime(currentEvent)}</Text>
           <Text style={[styles.text, styles.currentEventName, {color: scheduleInUse.color}]}>{currentEvent.eventName}</Text>
+        </View>
+        :
+        <View style={[styles.basic, styles.currentEvent]}>
+          <Text style={[styles.text, styles.noScheduletext]}>{i18n.t('main.noScheduleText')}</Text>
+          <Button title={i18n.t('main.noScheduleButton')} color={colors.green} onPress={() => navigation.navigate('New Schedule')} />
         </View>
       }
 
@@ -95,7 +101,7 @@ export default function MainScreen({ navigation }) {
 const createStyles = darkTheme => {
   const colors = darkTheme ? colorPalette.darkTheme : colorPalette.lightTheme
 
-  return StyleSheet.create({
+  return [StyleSheet.create({
     container: {
       backgroundColor: colors.secondaryBackground,
       flex: 1,
@@ -141,6 +147,12 @@ const createStyles = darkTheme => {
       justifyContent: 'flex-start',
       backgroundColor: colors.secondaryBackground,
       paddingHorizontal: 16
+    },
+    noScheduletext: {
+      marginBottom: 16,
+      marginHorizontal: 12,
+      fontSize: 24,
+      textAlign: 'center'
     }
-  })
+  }), colors]
 }
