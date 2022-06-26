@@ -3,10 +3,8 @@ import { StyleSheet, Text, SafeAreaView, View, Platform, StatusBar, Button } fro
 import { useFonts, OpenSans_400Regular } from '@expo-google-fonts/open-sans'
 import OctIcon from 'react-native-vector-icons/Octicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import dayjs from 'dayjs'
 
 import { colorPalette, GlobalContext } from '../config/config'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function MainScreen({ navigation }) {
   const { darkTheme, i18n, scheduleInUse } = useContext(GlobalContext)
@@ -16,7 +14,9 @@ export default function MainScreen({ navigation }) {
 
   const eventBeforeNow = (event) => {
     const {eventHours, eventMinutes} = event
-    const [currentHours, currentMinutes] = dayjs().format('HH:mm').split(':')
+
+    const actualDate = new Date()
+    const [currentHours, currentMinutes] = actualDate.toLocaleTimeString('en-GB').split(':')
 
     return parseInt(currentHours) === eventHours
       ? parseInt(currentMinutes) >= eventMinutes
@@ -56,7 +56,7 @@ export default function MainScreen({ navigation }) {
 
   const [fontsLoaded] = useFonts({OpenSans_400Regular})
 
-  const getEventTime = event => dayjs().hour(event.eventHours).minute(event.eventMinutes).format('HH:mm')
+  const getEventTime = event => event.eventHours.toString().padStart(2, '0') + ':' + event.eventMinutes.toString().padStart(2, '0')
 
   if (!fontsLoaded) {
     return null
@@ -74,7 +74,7 @@ export default function MainScreen({ navigation }) {
         />
       </View>
 
-      {Object.keys(scheduleInUse).length > 0 ?
+      {Object.keys(scheduleInUse).length > 0 && Object.keys(currentEvent).length > 0 ?
         <View style={[styles.basic, styles.currentEvent]}>
           <Text style={[styles.text, styles.clock, {color: scheduleInUse.color}]}>{getEventTime(currentEvent)}</Text>
           <Text style={[styles.text, styles.currentEventName, {color: scheduleInUse.color}]}>{currentEvent.eventName}</Text>
