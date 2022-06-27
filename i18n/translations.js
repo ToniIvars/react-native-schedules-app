@@ -16,7 +16,9 @@ const en = {
     alertTitle: 'Removal confirmation',
     alertMsg: 'Are you sure you want the schedule to be removed? This operation is irreversible.',
     alertBtnCancel: 'Cancel',
-    alertBtnOK: 'Remove'
+    alertBtnOK: 'Remove',
+    duplicateScheduleTitle: 'Duplicated schedule title',
+    invalidDuplicateTitle: 'The title is invalid'
   },
   newSchedule : {
     title: 'New schedule',
@@ -57,7 +59,9 @@ const es = {
     alertTitle: 'Confirma la eliminación',
     alertMsg: '¿Estás seguro de que quieres eliminar el horario? Esta operación es irreversible.',
     alertBtnCancel: 'Cancelar',
-    alertBtnOK: 'Eliminar'
+    alertBtnOK: 'Eliminar',
+    duplicateScheduleTitle: 'Título del horario duplicado',
+    invalidDuplicateTitle: 'El título es inválido'
   },
   newSchedule : {
     title: 'Nuevo horario',

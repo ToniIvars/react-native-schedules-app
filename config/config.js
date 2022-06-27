@@ -8,7 +8,8 @@ const colorPalette = {
     secondaryForeground: '#2B2B2B',
     green: '#358247',
     grey: '#E8E8E8',
-    red: '#E7214C'
+    red: '#E7214C',
+    orange: '#F18F01'
   },
   darkTheme: {
     mainBackground: '#424242',
@@ -17,7 +18,8 @@ const colorPalette = {
     secondaryForeground: '#2B2B2B',
     green: '#358247',
     grey: '#AFAFAF',
-    red: '#E7214C'
+    red: '#E7214C',
+    orange: '#F18F01'
   }
 }
 

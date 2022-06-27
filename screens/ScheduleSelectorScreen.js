@@ -1,16 +1,22 @@
-import { useContext } from 'react'
-import { StyleSheet, Text, SafeAreaView, View, ScrollView, Platform, StatusBar, Dimensions, Alert } from 'react-native'
+import { useContext, useState } from 'react'
+import { StyleSheet, Text, SafeAreaView, View, ScrollView, Platform, StatusBar, Dimensions, Alert, TextInput } from 'react-native'
 import { useFonts, OpenSans_400Regular } from '@expo-google-fonts/open-sans'
 import OctIcon from 'react-native-vector-icons/Octicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { ModalInput } from 'react-native-btr'
 
 import { colorPalette, GlobalContext } from '../config/config'
 import SchedulePreview from '../components/SchedulePreview'
 
 export default function ScheduleSelectorScreen({ navigation }) {
   const { darkTheme, i18n, saveData, schedules, setSchedules, setScheduleInUse } = useContext(GlobalContext)
+
+  const [modalInputVisible, setModalInputVisible] = useState(false)
+  const [indexToDuplicate, setIndexToDuplicate] = useState(0)
+  const [titleOfDuplicated, setTitleOfDuplicated] = useState('')
+  const [errorOnDuplicated, setErrorOnDuplicated] = useState('')
   
-  const [styles, colors] = createStyles(darkTheme)
+  const [styles, colors] = createStyles(darkTheme, errorOnDuplicated)
 
   const [fontsLoaded] = useFonts({OpenSans_400Regular})
 
@@ -61,6 +67,39 @@ export default function ScheduleSelectorScreen({ navigation }) {
       ]
     )
   }
+
+  const showModalInput = index => {
+    setModalInputVisible(true)
+    setIndexToDuplicate(index)
+    setTitleOfDuplicated(schedules[index].title)
+  }
+
+  const resetModal = () => {
+    setErrorOnDuplicated('')
+    setModalInputVisible(false)
+  }
+
+  const duplicateSchedule = () => {
+    const schedulesTitles = schedules.map(schedule => schedule.title)
+
+    if (schedulesTitles.includes(titleOfDuplicated) || titleOfDuplicated.length === 0) {
+      setErrorOnDuplicated(i18n.t('schedules.invalidDuplicateTitle'))
+
+    } else {
+      const duplicatedSchedule = JSON.parse(JSON.stringify(schedules[indexToDuplicate]))
+      duplicatedSchedule.title = titleOfDuplicated
+      duplicatedSchedule.inUse = false
+  
+      const newSchedules = [...schedules]
+      newSchedules.splice(indexToDuplicate + 1, 0, duplicatedSchedule)
+  
+      setSchedules(newSchedules)
+  
+      saveData('@schedules', newSchedules)
+  
+      resetModal()
+    }
+  }
   
   return (
     <SafeAreaView style={styles.container}>
@@ -74,9 +113,23 @@ export default function ScheduleSelectorScreen({ navigation }) {
         <Text style={[styles.text, styles.screenTitle]}>{i18n.t('schedules.title')}</Text>
       </View>
 
+      {modalInputVisible && (
+        <ModalInput onCancel={resetModal} onOk={duplicateSchedule}>
+          <Text style={[{fontFamily: 'OpenSans_400Regular'}, styles.duplicateScheduleInfo]}>{i18n.t('schedules.duplicateScheduleTitle')}:</Text>
+          <TextInput
+            multiline={false}
+            value={titleOfDuplicated}
+            onChangeText={text => setTitleOfDuplicated(text.trim())}
+            style={styles.duplicateScheduleInput}
+          />
+          {errorOnDuplicated.length > 0 && <Text style={styles.errorMessage}>{errorOnDuplicated}</Text>}
+        </ModalInput>
+      )}
+
       <ScrollView style={styles.scheduleSection} contentContainerStyle={[styles.basic, {justifyContent: 'flex-start'}]}>
         {schedules.map((ev, index) => <SchedulePreview key={index} styles={styles} colors={colors}
-            schedule={ev} index={index} showAlert={showAlert} selectSchedule={selectSchedule}navigation={navigation}
+            schedule={ev} index={index} showAlert={showAlert} selectSchedule={selectSchedule}
+            navigation={navigation} showModalInput={showModalInput}
           />
         )}
       </ScrollView>
@@ -92,7 +145,7 @@ export default function ScheduleSelectorScreen({ navigation }) {
   )
 }
 
-const createStyles = darkTheme => {
+const createStyles = (darkTheme, errorOnDuplicated) => {
   const colors = darkTheme ? colorPalette.darkTheme : colorPalette.lightTheme
 
   return [StyleSheet.create({
@@ -154,6 +207,11 @@ const createStyles = darkTheme => {
       flexDirection: 'row',
       justifyContent: 'space-between'
     },
+    scheduleButtons: {
+      backgroundColor: colors.secondaryBackground,
+      marginRight: 8,
+      flexDirection: 'row'
+    },
     scheduleTitle: {
       fontSize: 16,
       marginLeft: 10
@@ -162,7 +220,34 @@ const createStyles = darkTheme => {
       color: colors.red,
       marginTop: 2,
       paddingVertical: 10,
-      paddingHorizontal: 16
+      paddingHorizontal: 10
+    },
+    scheduleDuplicateButton: {
+      color: colors.orange,
+      marginTop: 4,
+      paddingVertical: 10,
+      paddingHorizontal: 8
+    },
+    duplicateScheduleInfo: {
+      paddingHorizontal: 12,
+      paddingTop: 12,
+    },
+    duplicateScheduleInput: {
+      backgroundColor: colors.secondaryBackground,
+      color: colors.mainForeground,
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+      marginHorizontal: 12,
+      marginTop: 12,
+      borderRadius: 5,
+      marginBottom: errorOnDuplicated.length === 0 ? 14 : 0
+    },
+    errorMessage: {
+      color: colors.red,
+      marginHorizontal: 20,
+      marginTop: 4,
+      marginBottom: 12,
+      fontSize: 14
     }
   }), colors]
 }
