@@ -65,14 +65,14 @@ export default function MainScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={[styles.basic, styles.configBar]}>
-        <OctIcon name='gear' size={24} style={[styles.text, {marginTop: 2, padding: 12}]}
-          onPress={() => navigation.navigate('Configuration')}
-        />
+        <MaterialIcon name='clock-outline' size={28} style={[styles.text, {marginTop: 1, paddingRight: 8}]} />
         <Text style={[styles.text, styles.scheduleTitle]}>{scheduleInUse.title ? scheduleInUse.title : i18n.t('main.noScheduleTitle')}</Text>
-        <MaterialIcon name='timetable' size={28} style={[styles.text, {marginTop: 6, padding: 12}]}
-          onPress={() => navigation.navigate('Schedules')}
-        />
       </View>
+
+      {/* <View style={[styles.basic, styles.titleBar]}>
+        <MaterialIcon name='timetable' size={28} style={[styles.text, {marginTop: 6, paddingRight: 10}]} />
+        <Text style={[styles.text, styles.screenTitle]}>{i18n.t('schedules.title')}</Text>
+      </View> */}
 
       {Object.keys(scheduleInUse).length > 0 && Object.keys(currentEvent).length > 0 ?
         <View style={[styles.basic, styles.currentEvent]}>
@@ -121,7 +121,6 @@ const createStyles = darkTheme => {
     configBar: {
       height: 60,
       flexDirection: 'row',
-      justifyContent: 'space-between',
       backgroundColor: colors.secondaryBackground,
       paddingHorizontal: 8
     },
@@ -145,7 +144,7 @@ const createStyles = darkTheme => {
       height: 60,
       flexDirection: 'row',
       justifyContent: 'flex-start',
-      backgroundColor: colors.secondaryBackground,
+      backgroundColor: colors.mainBackground,
       paddingHorizontal: 16
     },
     noScheduletext: {

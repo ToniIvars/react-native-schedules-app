@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import * as Localization from 'expo-localization'
 import i18n from 'i18n-js'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import OctIcon from 'react-native-vector-icons/Octicons'
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import MainScreen from './screens/MainScreen'
 import ConfigScreen from './screens/ConfigScreen'
@@ -11,8 +14,6 @@ import ScheduleSelectorScreen from './screens/ScheduleSelectorScreen'
 import ScheduleScreen from './screens/ScheduleScreen'
 import { en, es } from './i18n/translations'
 import { GlobalContext, languages } from './config/config'
-
-const Stack = createNativeStackNavigator()
 
 i18n.translations = { en, es }
 i18n.fallbacks = true
@@ -36,6 +37,20 @@ const saveData = async (key, value) => {
     console.error(e)
   }
 }
+
+const ScheduleStack = createNativeStackNavigator()
+
+function ScheduleStackScreen() {
+  return (
+    <ScheduleStack.Navigator screenOptions={{headerShown: false}}>
+      <ScheduleStack.Screen name='Schedules Selector' component={ScheduleSelectorScreen} />
+      <ScheduleStack.Screen name='New Schedule' component={ScheduleScreen} initialParams={{isNewSchedule: true}} />
+      <ScheduleStack.Screen name='Edit Schedule' component={ScheduleScreen} initialParams={{isNewSchedule: false}} />
+    </ScheduleStack.Navigator>
+  )
+}
+
+const Tab = createBottomTabNavigator()
 
 export default function App() {
   const [darkTheme, setDarkTheme] = useState(true)
@@ -82,16 +97,36 @@ export default function App() {
     setScheduleInUse, setScheduleInUse
   }
 
+  const screenOptions = {
+    tabBarLabelStyle: {marginBottom: 4, marginTop: 0},
+    tabBarIconStyle: {marginBottom: -4},
+    tabBarActiveTintColor: '#E7214C',
+    tabBarInactiveTintColor: darkTheme ? '#AFAFAF' : '#808080',
+    headerShown: false,
+    tabBarStyle: {backgroundColor: darkTheme ? '#2B2B2B' : '#CDCDCD', borderTopWidth: 0} 
+  }
+
   return (
     <NavigationContainer>
       <GlobalContext.Provider value={globalContextValue}>
-        <Stack.Navigator screenOptions={{headerShown: false}}>
-          <Stack.Screen name='Main' component={MainScreen} />
-          <Stack.Screen name='Configuration' component={ConfigScreen} />
-          <Stack.Screen name='Schedules' component={ScheduleSelectorScreen} />
-          <Stack.Screen name='New Schedule' component={ScheduleScreen} initialParams={{isNewSchedule: true}} />
-          <Stack.Screen name='Edit Schedule' component={ScheduleScreen} initialParams={{isNewSchedule: false}} />
-        </Stack.Navigator>
+        <Tab.Navigator screenOptions={screenOptions}>
+        <Tab.Screen name='Home' component={MainScreen} options={{
+            tabBarIcon: ({ color, size }) => <MaterialIcon name='clock-outline' size={size} color={color} />,
+            tabBarIconStyle: {marginBottom: -2},
+            title: i18n.t('main.title')
+          }}
+        />
+        <Tab.Screen name='Schedules' component={ScheduleStackScreen} options={{
+            tabBarIcon: ({ color, size }) => <MaterialIcon name='timetable' size={size-1} color={color} />,
+            title: i18n.t('schedules.title')
+          }}
+        />
+        <Tab.Screen name='Configuration' component={ConfigScreen} options={{
+            tabBarIcon: ({ color, size }) => <OctIcon name='gear' size={size-2} color={color} />,
+            title: i18n.t('config.title')
+          }}
+        />
+        </Tab.Navigator>
       </GlobalContext.Provider>
     </NavigationContainer>
   )

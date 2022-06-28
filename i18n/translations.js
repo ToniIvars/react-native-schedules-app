@@ -1,16 +1,18 @@
 const en = {
   main: {
+    title: 'Home',
     noNextEvent: 'There is no next event',
     noScheduleTitle: 'No schedule',
     noScheduleText: "Haven't created any schedule yet?",
     noScheduleButton: 'Create schedule now'
   },
   config: {
-    title: 'Configuration',
+    title: 'Settings',
     darkTheme: 'Dark theme',
     language: 'Language'
   },
   schedules: {
+    noSchedules: 'There are no created schedules yet',
     title: 'Schedules',
     button: 'New schedule',
     alertTitle: 'Removal confirmation',
@@ -43,17 +45,19 @@ const en = {
 
 const es = {
   main: {
+    title: 'Principal',
     noNextEvent: 'No hay siguiente evento',
     noScheduleTitle: 'Sin horario',
     noScheduleText: '¿No has creado ningún horario todavía?',
     noScheduleButton: 'Crear horario ahora'
   },
   config: {
-    title: 'Configuración',
+    title: 'Ajustes',
     darkTheme: 'Tema oscuro',
     language: 'Idioma'
   },
   schedules: {
+    noSchedules: 'No hay ningún horario creado todavía',
     title: 'Horarios',
     button: 'Nuevo horario',
     alertTitle: 'Confirma la eliminación',

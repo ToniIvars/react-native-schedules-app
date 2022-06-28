@@ -165,7 +165,7 @@ export default function ScheduleScreen({ route, navigation }) {
         
         return true
       })
-      .then(prev => prev && navigation.navigate('Schedules'))
+      .then(prev => prev && navigation.navigate('Schedules Selector'))
   }
   
   const [styles, colors] = createStyles(darkTheme)

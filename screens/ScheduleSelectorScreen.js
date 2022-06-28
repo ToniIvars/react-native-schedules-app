@@ -103,13 +103,8 @@ export default function ScheduleSelectorScreen({ navigation }) {
   
   return (
     <SafeAreaView style={styles.container}>
-      <OctIcon name='arrow-left' size={32}
-        style={styles.goBackIcon}
-        onPress={() => navigation.navigate('Main')}
-      />
-
       <View style={[styles.basic, styles.titleBar]}>
-        <MaterialIcon name='timetable' size={28} style={[styles.text, {marginTop: 6, paddingRight: 10}]} />
+        <MaterialIcon name='timetable' size={26} style={[styles.text, {marginTop: 6, paddingRight: 10}]} />
         <Text style={[styles.text, styles.screenTitle]}>{i18n.t('schedules.title')}</Text>
       </View>
 
@@ -127,11 +122,13 @@ export default function ScheduleSelectorScreen({ navigation }) {
       )}
 
       <ScrollView style={styles.scheduleSection} contentContainerStyle={[styles.basic, {justifyContent: 'flex-start'}]}>
-        {schedules.map((ev, index) => <SchedulePreview key={index} styles={styles} colors={colors}
+        {schedules.length > 0
+          ? schedules.map((ev, index) => <SchedulePreview key={index} styles={styles} colors={colors}
             schedule={ev} index={index} showAlert={showAlert} selectSchedule={selectSchedule}
             navigation={navigation} showModalInput={showModalInput}
-          />
-        )}
+          />)
+          : <Text style={[styles.text, {fontSize: 16}]}>{i18n.t('schedules.noSchedules')}</Text>
+        }
       </ScrollView>
 
       <View style={[styles.basic, {backgroundColor: colors.mainBackground, paddingTop: 10}]}>
@@ -177,15 +174,7 @@ const createStyles = (darkTheme, errorOnDuplicated) => {
       flex: 1,
       backgroundColor: colors.mainBackground,
       paddingTop: 10,
-    },
-    goBackIcon: {
-      position: 'absolute',
-      top: (Platform.OS === 'android' ? StatusBar.currentHeight : 0) + 6,
-      left: 4,
-      color: colors.mainForeground,
-      zIndex: 1,
-      paddingVertical: 10,
-      paddingHorizontal: 16
+      width: '100%'
     },
     newSchedule: {
       width: Dimensions.get('window').width - 40,
