@@ -65,14 +65,22 @@ export default function ScheduleScreen({ route, navigation }) {
       return [false, i18n.t('scheduleCreation.invalidEventsTitles')]
     }
 
-    const scheduleEventsHours = schedule.events.map(event => event.eventHours)
-    const scheduleEventsMinutes = schedule.events.map(event => event.eventMinutes)
+    const scheduleEventsTimes = schedule.events.map(({ eventHours, eventMinutes }) => {
+      return {
+        hours: eventHours, 
+        minutes: eventMinutes
+      }
+    })
 
-    if (scheduleEvents.some(({ eventHours, eventMinutes }) => scheduleEventsHours.filter(hours => hours === eventHours).length > 1 &&
-      scheduleEventsMinutes.filter(minutes => minutes === eventMinutes).length > 1)
-    ) {
-      return [false, i18n.t('scheduleCreation.invalidEventsTimes')]
-    }
+    let sameTime = 0
+
+    scheduleEvents.forEach(({ eventHours, eventMinutes }, eventIndex) => {
+      if (scheduleEventsTimes.filter((el, elIndex) => {
+        return elIndex !== eventIndex && el.hours === eventHours && el.minutes === eventMinutes
+      }).length > 0) sameTime++
+    })
+
+    if (sameTime > 0) return [false, i18n.t('scheduleCreation.invalidEventsTimes')]
 
     return [true, '']
   }
